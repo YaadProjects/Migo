@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h2>Welcome to Ionic!</h2>
+
+  <form action="" (ngSubmit)="logForm()">
+
+    <ion-list>
+
+    <ion-item>
+      <ion-label floating>Username</ion-label>
+      <ion-input [(ngModel)]="table.name" type="text" name="name" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Description</ion-label>
+      <ion-input type="text" [(ngModel)]="table.description" name="desc" required #des></ion-input>
+    </ion-item>
+
+
+<ion-item>
+  <ion-label>Starting Year</ion-label>
+  <ion-select [(ngModel)]="startYear" name="startYear" required>
+    <ion-option value="2010" selected="true" selected>2010</ion-option>
+    <ion-option [value]="year" *ngFor="let year of[2011,2012]">{{year}}</ion-option>
+  </ion-select>
+</ion-item>
+
+    <ion-item>
+      <ion-label>Date</ion-label>
+      <ion-datetime displayFormat="MMMM YYYY" [min]="startYear"
+      max="2020-10-31" name="date" [(ngModel)]="table.date">
+      </ion-datetime>
+    </ion-item>
+
+
+    {{ table |json }}
+  </ion-list>
+   <button ion-button rounded type="submit" block>Submit</button>
+
+
+   <button ion-button rounded type="submit" block clear (click)="goToMap()">GoTo Map</button>
+  </form>
+
+
+  <p>
+    This starter project comes with simple tabs-based layout for apps that are going to primarily use a Tabbed UI.
+  </p>
+  <p>
+    Take a look at the <code>src/pages/</code> directory to add or change tabs, update any existing page or create new pages.
+  </p>
+</ion-content>
