@@ -1,23 +1,33 @@
 import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { FormsModule } from '@angular/forms';
-import { MyApp } from './app.component';
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
-import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
 import { AgmCoreModule } from 'angular2-google-maps/core';
+import { MyApp } from './app.component';
 
+//pages
+
+import { UserSelectionPage } from '../pages/user-selection/user-selection';
+import { DriverPage } from '../pages/driver/driver';
+import { PassengerPage } from '../pages/passenger/passenger';
+import { TripMapPage } from '../pages/trip-map/trip-map';
+
+//services
+import { UserService } from '../providers/user';
+
+// create commonArray for the declarations and entryComponents
+
+const commonPages = [
+  MyApp,
+  UserSelectionPage,
+  DriverPage,
+  PassengerPage,
+  TripMapPage
+];
 
 
 @NgModule({
   declarations: [
-    MyApp,
-    AboutPage,
-    ContactPage,
-    HomePage,
-    TabsPage
-
+    ...commonPages
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -29,12 +39,10 @@ import { AgmCoreModule } from 'angular2-google-maps/core';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    AboutPage,
-    ContactPage,
-    HomePage,
-    TabsPage
+    ...commonPages
   ],
-  providers: []
+  providers: [
+    UserService
+  ]
 })
-export class AppModule {}
+export class AppModule { }
