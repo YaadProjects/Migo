@@ -29,6 +29,7 @@ weird line in the console while doing `ionic emulate ios`.
   Import links 
 - [places api](https://github.com/SebastianM/angular2-google-maps/issues/431)
 - [Auto complete Api](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete)
+- [google directions Api](https://github.com/SebastianM/angular2-google-maps/issues/495) There is a directive for that we can use.
 
 
 ## To-dos
