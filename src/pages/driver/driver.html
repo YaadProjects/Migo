@@ -30,7 +30,7 @@
        />
     </ion-item>
     <small padding-left color="danger"
-    [hidden]="startLocation.valid || (tripForm.pristine && !tripForm.submitted)">
+    [hidden]="startLocation.valid || (!tripForm.submitted)">
       Start time is required field
     </small>
 
@@ -43,7 +43,7 @@
       id="endLocation" placeholder="Where are you traveling to?" class="full-width" />
     </ion-item>
     <small padding-left color="danger"
-    [hidden]="endLocation.valid || (tripForm.pristine && !tripForm.submitted)">
+    [hidden]="endLocation.valid || !tripForm.submitted">
       Start time is required field
     </small>
 
@@ -54,19 +54,20 @@
         #startTime="ngModel"></ion-datetime>
     </ion-item>
     <small padding-left color="danger"
-    [hidden]="startTime.valid || (tripForm.pristine && !tripForm.submitted)">
+    [hidden]="startTime.valid || !tripForm.submitted">
       Start time is required field
     </small>
     <ion-item>
       <ion-label floating>Trip End Time(est.)</ion-label>
       <ion-datetime displayFormat="MMM DD, YYYY HH:mm" [min]="trip.startTime" [max]="endMaxTimeAccepted"
       [(ngModel)]="trip.endTime"
+      (ionChange)="tripDatesOk()"
       #endTime='ngModel'
       required
       name="endDate"></ion-datetime>
     </ion-item>
     <small padding-left color="danger"
-    [hidden]="endTime.valid || (tripForm.pristine && !tripForm.submitted)">
+    [hidden]="endTime.valid || (!tripForm.submitted)">
       End Trip time is required field.
     </small>
 

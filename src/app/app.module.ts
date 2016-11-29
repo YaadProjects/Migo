@@ -4,8 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { MyApp } from './app.component';
 
-//pages
+//directive and components
 
+import { DirectionsMapDirective } from '../components/sebm-google-map-directions/sebm-google-map-directions';
+
+//pages
 import { UserSelectionPage } from '../pages/user-selection/user-selection';
 import { DriverPage } from '../pages/driver/driver';
 import { PassengerPage } from '../pages/passenger/passenger';
@@ -21,14 +24,17 @@ const commonPages = [
   UserSelectionPage,
   DriverPage,
   PassengerPage,
-  TripMapPage
+  TripMapPage,
+
 ];
 
 
 @NgModule({
   declarations: [
-    ...commonPages
+    ...commonPages,
+    DirectionsMapDirective
   ],
+
   imports: [
     IonicModule.forRoot(MyApp),
     FormsModule,
