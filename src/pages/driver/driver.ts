@@ -1,26 +1,14 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 
+//types
+import { TripTypeEnum, TripObjectInterface, USERTYPES } from '../../app-types/app-types';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
+
 import { GoogleMapsAPIWrapper, MapsAPILoader } from 'angular2-google-maps/core';
-
 import { TripMapPage } from '../trip-map/trip-map';
-
-
-declare var google: any;
-export enum TripTypeEnum {
-  OneWay,
-  Round
-}
-
-interface TripObjectInterface {
-  startLocation?: Object;
-  endLocation?: Object;
-  startTime?: string; //ToDo: need to decide if we want to store timeStamp i guess that will be amazing
-  endTime?: string; // same for this
-  createdAt?: number | string; //ToDo: do we need this?
-  type?: TripTypeEnum; // This is a number [0, 1]
-}
-
+import { ErrorHandler } from '../../providers/errorhandler';
+import { tripRawToDbObject } from '../../app-lib/utilities';
 
 /*
   Generated class for the Driver page.
@@ -46,15 +34,19 @@ export class DriverPage {
   dummyStartTime: number = 0;
   dummyEndTime: number = 0;
 
-  trip: TripObjectInterface = {};
+  trip: TripObjectInterface = {userType: USERTYPES.driver.name };
 
-
+  driverTrips: FirebaseListObservable<any>;
 
   constructor(public navCtrl: NavController,
     public gApi: GoogleMapsAPIWrapper,
     public gLoader: MapsAPILoader,
-    private toastCtrl: ToastController
-  ) { }
+    private toastCtrl: ToastController,
+    private af: AngularFire,
+    private eh: ErrorHandler
+  ) {
+    this.driverTrips = af.database.list('/trips/driver');
+  }
 
   ionViewDidLoad() {
     this.trip.type = TripTypeEnum.OneWay;
@@ -75,10 +67,13 @@ export class DriverPage {
       let endLocation = new google.maps.places.Autocomplete(document.getElementById("endLocation"), {});
       google.maps.event.addListener(startLocation, 'place_changed', () => {
         this.trip.startLocation = startLocation.getPlace().geometry;
+        this.trip.startLocation.formatted_address = startLocation.getPlace().formatted_address;
       });
 
       google.maps.event.addListener(endLocation, 'place_changed', () => {
+        console.log(endLocation.getPlace());
         this.trip.endLocation = endLocation.getPlace().geometry;
+        this.trip.endLocation.formatted_address = endLocation.getPlace().formatted_address;
       });
     });
   }
@@ -119,7 +114,13 @@ export class DriverPage {
     ev.preventDefault();
     if (tripFrom.valid && this.tripDatesOk()) {
       //check if dates are valid
-      this.navCtrl.push(TripMapPage, { trip: this.trip });
+      let myDbOBject = tripRawToDbObject(this.trip);
+      this.driverTrips.push(myDbOBject)
+        .then(() =>
+          this.navCtrl.push(TripMapPage, {
+            trip: this.trip
+          })
+        ).catch(this.eh.handle);
     }
   }
 

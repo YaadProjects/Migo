@@ -1,6 +1,5 @@
 import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core/services/google-maps-api-wrapper';
 import { Directive, Input } from '@angular/core';
-declare var google: any;
 
 export interface latLngObject {
   lat: string | number;
