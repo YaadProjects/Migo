@@ -3,7 +3,9 @@ import { NavController } from 'ionic-angular';
 import { User, UserService } from '../../providers/user';
 import { DriverPage } from '../driver/driver';
 import { PassengerPage } from '../passenger/passenger';
+import { Auth } from '../../providers/auth';
 
+// import 'rx/add'
 
 /*
   Generated class for the UserSelection page.
@@ -18,7 +20,9 @@ import { PassengerPage } from '../passenger/passenger';
 export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecked{
   appTitle: string = 'ProjectX';
   user: User;
-  constructor(public navCtrl: NavController, public userService: UserService) {
+  constructor(public navCtrl: NavController,
+    public auth: Auth,
+    public userService: UserService) {
 
   }
 
@@ -27,10 +31,16 @@ export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecke
     this.getUser();
    // this.userService
    //   .getUser()
+
+    this.auth.getAuth().subscribe(auth => console.log(auth));
   }
 
   goToDriver() {
     this.navCtrl.push(DriverPage);
+  }
+
+  googleLogin() {
+    this.auth.loginWithGoogle();
   }
 
   goToPassenger() {

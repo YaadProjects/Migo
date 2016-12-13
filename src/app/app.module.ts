@@ -18,6 +18,7 @@ import { TripMapPage } from '../pages/trip-map/trip-map';
 //services
 import { UserService } from '../providers/user';
 import { ErrorHandler } from '../providers/errorhandler';
+import { Auth } from '../providers/auth';
 
 
 export const firebaseConfig = {
@@ -60,6 +61,7 @@ const commonPages = [
   ],
   providers: [
     UserService,
+    Auth,
     ErrorHandler
   ]
 })
