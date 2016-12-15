@@ -39,6 +39,10 @@ export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecke
     this.navCtrl.push(DriverPage);
   }
 
+  facebookLogin() {
+    this.auth.loginWithFacebook();
+  }
+
   googleLogin() {
     this.auth.loginWithGoogle();
   }
@@ -59,8 +63,14 @@ export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecke
 
   }
 
+  logout():void {
+    this.auth.logout();
+  }
+
   getUser() {
-    this.userService.getUser().then(user=>this.user=user);
+    this.userService.getUser().then(user=>{
+      console.log("controller", user);
+    });
   }
 
   ionViewDidLoad() {
