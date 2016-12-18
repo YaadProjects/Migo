@@ -33,7 +33,7 @@ export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecke
     //this.getUser();
     this.auth.getAuth().subscribe(auth => {
       if (!auth) {
-        let loginModal = this.modalCrl.create(LoginPage);
+        let loginModal = this.modalCrl.create(LoginPage, {}, { enableBackdropDismiss: false, showBackdrop: true });
         loginModal.present();
       }
     });
