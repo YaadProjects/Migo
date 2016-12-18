@@ -1,7 +1,9 @@
 import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ModalController } from 'ionic-angular';
 import { User, UserService } from '../../providers/user';
+
 import { DriverPage } from '../driver/driver';
+import { LoginPage } from '../login/login';
 import { PassengerPage } from '../passenger/passenger';
 import { Auth } from '../../providers/auth';
 
@@ -17,34 +19,28 @@ import { Auth } from '../../providers/auth';
   selector: 'page-user-selection',
   templateUrl: 'user-selection.html'
 })
-export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecked{
+export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecked {
   appTitle: string = 'ProjectX';
   user: User;
   constructor(public navCtrl: NavController,
     public auth: Auth,
+    public modalCrl: ModalController,
     public userService: UserService) {
 
   }
 
   ngOnInit() {
-
-    this.getUser();
-   // this.userService
-   //   .getUser()
-
-    this.auth.getAuth().subscribe(auth => console.log(auth));
+    //this.getUser();
+    this.auth.getAuth().subscribe(auth => {
+      if (!auth) {
+        let loginModal = this.modalCrl.create(LoginPage);
+        loginModal.present();
+      }
+    });
   }
 
   goToDriver() {
     this.navCtrl.push(DriverPage);
-  }
-
-  facebookLogin() {
-    this.auth.loginWithFacebook();
-  }
-
-  googleLogin() {
-    this.auth.loginWithGoogle();
   }
 
   goToPassenger() {
@@ -63,12 +59,12 @@ export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecke
 
   }
 
-  logout():void {
+  logout(): void {
     this.auth.logout();
   }
 
   getUser() {
-    this.userService.getUser().then(user=>{
+    this.userService.getUser().then(user => {
       console.log("controller", user);
     });
   }

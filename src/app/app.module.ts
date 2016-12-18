@@ -14,6 +14,7 @@ import { UserSelectionPage } from '../pages/user-selection/user-selection';
 import { DriverPage } from '../pages/driver/driver';
 import { PassengerPage } from '../pages/passenger/passenger';
 import { TripMapPage } from '../pages/trip-map/trip-map';
+import { LoginPage } from '../pages/login/login';
 
 //services
 import { UserService } from '../providers/user';
@@ -36,7 +37,7 @@ const commonPages = [
   DriverPage,
   PassengerPage,
   TripMapPage,
-
+  LoginPage
 ];
 
 

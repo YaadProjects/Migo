@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Http } from '@angular/http';
 import {
   AngularFire, AuthMethods, AuthProviders,
-  FirebaseObjectObservable,
+  FirebaseObjectObservable, FirebaseRef
   // AngularFireAuth
 } from 'angularfire2';
 
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
@@ -15,7 +15,9 @@ import 'rxjs/add/operator/take';
 @Injectable()
 export class Auth {
 
-  constructor(public http: Http, public af: AngularFire) {
+  constructor(public http: Http,
+    @Inject(FirebaseRef) private firebase,
+    public af: AngularFire) {
 
   }
 
@@ -29,7 +31,7 @@ export class Auth {
       method: AuthMethods.Popup
     })
       .then((authFacebookData) => this.saveFabookUserData(authFacebookData))
-      .catch(e=>this.loginError(e));
+      .catch(e => this.loginError(e));
   }
 
   loginWithGoogle() {
@@ -75,20 +77,34 @@ export class Auth {
   }
 
 
-
   loginError(error) {
-
+    let auth = this.firebase.auth();
     if (error.code === 'auth/account-exists-with-different-credential') {
-      // Means user has already singedIn using other method.
-      // There a way to do it correctly.
-      // https://firebase.google.com/docs/auth/web/google-signin#popup-mode
-      // fetchProvidersForEmail is not able to execute.
-      // will show the alert the user to use other login method.
-      console.info("Please use other login method to login.:)");
+      let {email, credential} = error;
+      auth
+        .fetchProvidersForEmail(email)
+        .then(providers => {
+          let [providerName] = providers;
+          let providerObjet = Auth.getProviderObject(providerName);
+
+          auth.signInWithPopup(providerObjet)
+            .then(result => {
+              result.user.link(credential).then(function (message) {
+              });
+            })
+        });
       return error;
     }
-    console.error('Login Error:',error);
+    console.error('Login Error:', error);
   }
 
+  static getProviderObject(providerName) {
+    switch (providerName) {
+      case 'google.com':
+        return new firebase.auth.GoogleAuthProvider;
+      case 'facebook.com':
+        return new firebase.auth.FacebookAuthProvider;
+    }
+  }
 
 }
