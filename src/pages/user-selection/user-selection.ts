@@ -1,9 +1,13 @@
 import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ModalController } from 'ionic-angular';
 import { User, UserService } from '../../providers/user';
-import { DriverPage } from '../driver/driver';
-import { PassengerPage } from '../passenger/passenger';
 
+import { DriverPage } from '../driver/driver';
+import { LoginPage } from '../login/login';
+import { PassengerPage } from '../passenger/passenger';
+import { Auth } from '../../providers/auth';
+
+// import 'rx/add'
 
 /*
   Generated class for the UserSelection page.
@@ -15,18 +19,24 @@ import { PassengerPage } from '../passenger/passenger';
   selector: 'page-user-selection',
   templateUrl: 'user-selection.html'
 })
-export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecked{
+export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecked {
   appTitle: string = 'ProjectX';
   user: User;
-  constructor(public navCtrl: NavController, public userService: UserService) {
+  constructor(public navCtrl: NavController,
+    public auth: Auth,
+    public modalCrl: ModalController,
+    public userService: UserService) {
 
   }
 
   ngOnInit() {
-
-    this.getUser();
-   // this.userService
-   //   .getUser()
+    //this.getUser();
+    this.auth.getAuth().subscribe(auth => {
+      if (!auth) {
+        let loginModal = this.modalCrl.create(LoginPage, {}, { enableBackdropDismiss: false, showBackdrop: true });
+        loginModal.present();
+      }
+    });
   }
 
   goToDriver() {
@@ -49,8 +59,14 @@ export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecke
 
   }
 
+  logout(): void {
+    this.auth.logout();
+  }
+
   getUser() {
-    this.userService.getUser().then(user=>this.user=user);
+    this.userService.getUser().then(user => {
+      console.log("controller", user);
+    });
   }
 
   ionViewDidLoad() {

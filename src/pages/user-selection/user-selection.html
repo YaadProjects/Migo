@@ -15,7 +15,8 @@
 
 <ion-content padding>
     <h1  text-center>
-     Hello, {{ user?.name }} !
+     Hello
+     {{ (this.auth.getAuth() | async)?.auth?.displayName }} !
     </h1>
 
   <ion-item>
@@ -33,6 +34,15 @@
     <button ion-button block  color="secondary" large
     (click)="goToPassenger()"
     >Passenger</button>
+  </ion-item>
+
+
+
+
+   <ion-item padding-top no-lines>
+    <button ion-button block  color="danger" large
+    (click)="logout()"
+    >Logout</button>
   </ion-item>
 
 
