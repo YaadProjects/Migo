@@ -3,10 +3,7 @@ import { Http } from '@angular/http';
 import {
   AngularFire, AuthMethods, AuthProviders,
   FirebaseObjectObservable, FirebaseRef
-  // AngularFireAuth
 } from 'angularfire2';
-
-// import * as firebase from 'firebase';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
@@ -18,7 +15,6 @@ export class Auth {
   constructor(public http: Http,
     @Inject(FirebaseRef) private firebase,
     public af: AngularFire) {
-
   }
 
   getAuth() {
@@ -30,7 +26,7 @@ export class Auth {
       provider: AuthProviders.Facebook,
       method: AuthMethods.Popup
     })
-      .then((authFacebookData) => this.saveFabookUserData(authFacebookData))
+      .then((authFacebookData) => this.saveUserData(authFacebookData))
       .catch(e => this.loginError(e));
   }
 
@@ -39,7 +35,7 @@ export class Auth {
       provider: AuthProviders.Google,
       method: AuthMethods.Popup
     })
-      .then((authData) => this.saveGoogleUserData(authData))
+      .then((authGoogleData) => this.saveUserData(authGoogleData))
       .catch(e => this.loginError(e));
 
   }
@@ -48,8 +44,7 @@ export class Auth {
     this.af.auth.logout();
   }
 
-
-  saveGoogleUserData(authData) {
+  saveUserData(authData) {
     let {auth: {uid, displayName, email, providerData},
       provider } = authData;
     let userObj: FirebaseObjectObservable<any> = this.af.database.object(`users/${uid}`);
@@ -71,11 +66,6 @@ export class Auth {
 
 
   }
-
-  saveFabookUserData(authData) {
-    console.log(authData);
-  }
-
 
   loginError(error) {
     let auth = this.firebase.auth();
