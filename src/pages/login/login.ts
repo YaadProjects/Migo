@@ -1,6 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import { NavController, ModalController, ViewController } from 'ionic-angular';
-import { AuthMethods, AuthProviders, AngularFire, FirebaseRef } from 'angularfire2';
+import { Component, OnInit } from '@angular/core';
+import { NavController, ViewController } from 'ionic-angular';
+import { AngularFire } from 'angularfire2';
+
+import { appName } from '../../app-types/app-types';
 
 import { Auth } from '../../providers/auth';
 import { UserSelectionPage } from '../user-selection/user-selection';
@@ -10,17 +12,15 @@ import { UserSelectionPage } from '../user-selection/user-selection';
   selector: 'page-login',
   templateUrl: 'login.html',
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
+  appTitle:string = appName;
 
-  constructor(public navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
     public auth: Auth,
     public af: AngularFire,
-    //public modalCtrl: ModalController,
     public viewCtrl: ViewController
-  ) {
-
-
-  }
+  ) {}
 
   ngOnInit() {
     this.af.auth.subscribe(auth => {
@@ -41,6 +41,4 @@ export class LoginPage {
   dismiss(): Promise<any> {
     return this.viewCtrl.dismiss();
   }
-
-
 }

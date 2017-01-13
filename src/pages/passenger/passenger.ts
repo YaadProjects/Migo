@@ -3,32 +3,26 @@ import { NavController, ToastController } from 'ionic-angular';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 //types
-import { TripTypeEnum, TripObjectInterface, USERTYPES } from '../../app-types/app-types';
+import { TripTypeEnum, TripObjectInterface, USERTYPES,  appName } from '../../app-types/app-types';
 
 import { GoogleMapsAPIWrapper, MapsAPILoader } from 'angular2-google-maps/core';
-import { TripMapPage } from '../trip-map/trip-map';
+import { Dashboard } from '../dashboard/dashboard';
 import { ErrorHandler } from '../../providers/errorhandler';
-import { tripRawToDbObject } from '../../app-lib/utilities';
+import { tripRawToDbObject, toISOStringWithTZ } from '../../app-lib/utilities';
 
-/*
-  Generated class for the Passenger page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-passenger',
   templateUrl: 'passenger.html',
   providers: [GoogleMapsAPIWrapper],
 })
 export class PassengerPage {
-
+  appTitle :string = appName;
   startTripLocation: any;
   endTripLocation: any;
   tripType: TripTypeEnum = TripTypeEnum.OneWay;
   allTripType = TripTypeEnum;
-  currentTime: string = new Date().toISOString();
-  maxTimeAccepted: string = new Date(Date.now() + 3600 * 1000 * 24 * 60).toISOString();
+  currentTime: string = toISOStringWithTZ(new Date());
+  maxTimeAccepted: string = toISOStringWithTZ(new Date(Date.now() + 3600 * 1000 * 24 * 60));
   endMaxTimeAccepted: string = this.maxTimeAccepted;
   dummyStartTime: number = 0;
   dummyEndTime: number = 0;
@@ -44,7 +38,7 @@ export class PassengerPage {
     public eh: ErrorHandler,
     private toastCtrl: ToastController
   ) {
-    this.passengerTrips = this.af.database.list('/trips/passenger');
+    this.passengerTrips = this.af.database.list('/trips/' + af.auth.getAuth().uid +'/passenger');
    }
 
   ionViewDidLoad() {
@@ -64,14 +58,17 @@ export class PassengerPage {
     this.gLoader.load().then(() => {
       let startLocation = new google.maps.places.Autocomplete(document.getElementById("startLocation"), {});
       let endLocation = new google.maps.places.Autocomplete(document.getElementById("endLocation"), {});
+
       google.maps.event.addListener(startLocation, 'place_changed', () => {
         this.trip.startLocation = startLocation.getPlace().geometry;
         this.trip.startLocation.formatted_address = startLocation.getPlace().formatted_address;
+        this.trip.startLocation.name = startLocation.getPlace().name;
       });
 
       google.maps.event.addListener(endLocation, 'place_changed', () => {
         this.trip.endLocation = endLocation.getPlace().geometry;
         this.trip.endLocation.formatted_address = endLocation.getPlace().formatted_address;
+        this.trip.endLocation.name = endLocation.getPlace().name;
       });
     });
   }
@@ -95,7 +92,7 @@ export class PassengerPage {
 
   showDateCorrectionToast(): void {
     let toast = this.toastCtrl.create({
-      message: 'Please correct trip end time.',
+      message: 'Please correct Trip End Time.',
       duration: 3000,
       position: 'middle'
     });
@@ -115,11 +112,10 @@ export class PassengerPage {
       let myDbOBject = tripRawToDbObject(this.trip);
       this.passengerTrips.push(myDbOBject)
         .then(() =>
-          this.navCtrl.push(TripMapPage, {
+          this.navCtrl.push(Dashboard, {
             trip: this.trip
           })
         ).catch(this.eh.handle);
     }
   }
-
 }

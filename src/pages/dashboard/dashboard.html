@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{appTitle}} Dashboard</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list inset>
+    <button ion-item *ngFor="let trip of tripsAsDriver | async" (click)="takeToDriverPage(trip)">
+      {{ trip.startLocation.name }} To {{ trip.endLocation.name }}
+    </button>
+  </ion-list>
+</ion-content>

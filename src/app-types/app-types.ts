@@ -1,3 +1,5 @@
+export const appName = 'SpareSeAT';
+
 export enum TripTypeEnum {
   OneWay,
   Round
@@ -11,7 +13,6 @@ export const USERTYPES = {
   }
 };
 
-
 export interface TripObjectInterface {
   //some info about the user
   userType: string;
@@ -23,6 +24,7 @@ export interface TripObjectInterface {
       lng: Function
     },
     formatted_address: string;
+    name: string;
   };
   endLocation?: {
     location: {
@@ -30,6 +32,7 @@ export interface TripObjectInterface {
       lng: Function
     }
     formatted_address: string;
+    name: string;
   };
   startTime?: string; //ToDo: need to decide if we want to store timeStamp i guess that will be amazing
   endTime?: string; // same for this
@@ -47,15 +50,16 @@ export interface TripObjectInDB {
       lat: number,
       lng: number,
       formatted_address: string;
+      name: string;
   };
   endLocation?: {
       lat: number,
       lng: number
       formatted_address: string;
+      name: string;
   };
   startTime?: string; //ToDo: need to decide if we want to store timeStamp i guess that will be amazing
   endTime?: string; // same for this
   createdAt?: number | string; //ToDo: do we need this?
   type?: TripTypeEnum; // This is a number [0, 1]
-
 }

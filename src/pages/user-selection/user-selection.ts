@@ -1,36 +1,34 @@
-import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 import { User, UserService } from '../../providers/user';
+
+import { appName } from '../../app-types/app-types';
 
 import { DriverPage } from '../driver/driver';
 import { LoginPage } from '../login/login';
 import { PassengerPage } from '../passenger/passenger';
+
+import { Dashboard } from '../dashboard/dashboard';
+
 import { Auth } from '../../providers/auth';
 
-// import 'rx/add'
-
-/*
-  Generated class for the UserSelection page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-user-selection',
   templateUrl: 'user-selection.html'
 })
-export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecked {
-  appTitle: string = 'ProjectX';
+export class UserSelectionPage implements OnInit {
+  // variables
+  appTitle: string = appName;
   user: User;
-  constructor(public navCtrl: NavController,
+
+  constructor(
+    public navCtrl: NavController,
     public auth: Auth,
     public modalCrl: ModalController,
-    public userService: UserService) {
-
-  }
+    public userService: UserService
+    ) {}
 
   ngOnInit() {
-    //this.getUser();
     this.auth.getAuth().subscribe(auth => {
       if (!auth) {
         let loginModal = this.modalCrl.create(LoginPage, {}, { enableBackdropDismiss: false, showBackdrop: true });
@@ -47,16 +45,8 @@ export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecke
     this.navCtrl.push(PassengerPage);
   }
 
-  _navigateTo() {
-
-  }
-
-  ngAfterViewInit() {
-    console.log('ngAfterViewInit');
-  }
-
-  ngAfterViewChecked() {
-
+  goToDashboard() {
+    this.navCtrl.push(Dashboard);
   }
 
   logout(): void {
@@ -68,9 +58,4 @@ export class UserSelectionPage implements OnInit, AfterViewInit, AfterViewChecke
       console.log("controller", user);
     });
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ::: Hello UserSelectionPage Page');
-  }
-
 }
