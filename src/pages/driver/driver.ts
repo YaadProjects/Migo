@@ -10,6 +10,8 @@ import { Dashboard } from '../dashboard/dashboard';
 import { ErrorHandler } from '../../providers/errorhandler';
 import { tripRawToDbObject, toISOStringWithTZ } from '../../app-lib/utilities';
 
+// import {GroupBy} from '../../pipes/group-by';
+
 @Component({
   selector: 'page-driver',
   templateUrl: 'driver.html',
@@ -27,8 +29,9 @@ export class DriverPage {
   endMaxTimeAccepted: string = this.maxTimeAccepted;
   dummyStartTime: number = 0;
   dummyEndTime: number = 0;
+  canSubmit: boolean = true;
 
-  trip: TripObjectInterface = { userType: USERTYPES.driver.name };
+  trip: TripObjectInterface;
 
   driverTrips: FirebaseListObservable<any>;
 
@@ -42,11 +45,18 @@ export class DriverPage {
     private eh: ErrorHandler
   ) {
     this.driverTrips = af.database.list("/trips/" + af.auth.getAuth().uid + "/driver");
+
+    // View already existing trip
     this.trip = params.get('trip');
 
     if (this.trip) {
+      this.canSubmit = false;
       this.startTripLocation = this.trip.startLocation.formatted_address;
       this.endTripLocation = this.trip.endLocation.formatted_address;
+      this.initAddressAutoComplete();
+    } else {
+      // new trip
+      this.trip = { userType: USERTYPES.driver.name } ;
     }
   }
 

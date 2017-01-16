@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
-import { User, UserService } from '../../providers/user';
+// import { User, UserService } from '../../providers/user';
 
 import { appName } from '../../app-types/app-types';
 
@@ -19,13 +19,11 @@ import { Auth } from '../../providers/auth';
 export class UserSelectionPage implements OnInit {
   // variables
   appTitle: string = appName;
-  user: User;
 
   constructor(
     public navCtrl: NavController,
     public auth: Auth,
-    public modalCrl: ModalController,
-    public userService: UserService
+    public modalCrl: ModalController
     ) {}
 
   ngOnInit() {
@@ -51,11 +49,5 @@ export class UserSelectionPage implements OnInit {
 
   logout(): void {
     this.auth.logout();
-  }
-
-  getUser() {
-    this.userService.getUser().then(user => {
-      console.log("controller", user);
-    });
   }
 }

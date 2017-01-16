@@ -27,4 +27,8 @@ export class Dashboard {
     this.navCtrl.push(DriverPage, {trip: tripObj});
   }
 
+  displayDay(date){
+    return new Date(date.replace(/-/g, '/')).toDateString();
+  }
+
 }

@@ -22,6 +22,9 @@ import { UserService } from '../providers/user';
 import { ErrorHandler } from '../providers/errorhandler';
 import { Auth } from '../providers/auth';
 
+// pipes
+
+import {GroupBy} from '../pipes/group-by';
 
 // export const firebaseConfig = {
 //   apiKey: "AIzaSyAM62vxsf8Vr1pdZfJdmcK-ZGMjq9l3tHk",
@@ -53,7 +56,8 @@ const commonPages = [
 @NgModule({
   declarations: [
     ...commonPages,
-    DirectionsMapDirective
+    DirectionsMapDirective,
+    GroupBy
   ],
 
   imports: [

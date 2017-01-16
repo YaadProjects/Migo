@@ -6,9 +6,9 @@
 
 
 <ion-content padding>
-  <div padding>
+  <div padding [hidden]="!canSubmit" class="message">
     <h2>
-      OK, great! Tell us a little bit about your trip
+      Great ! Tell us a little bit about your trip.
     </h2>
   </div>
 
@@ -93,7 +93,7 @@
     </small>
 
     <ion-item no-lines>
-      <button block ion-button color="secondary" type="submit" large outline>Submit</button>
+      <button [hidden]="!canSubmit" block ion-button color="secondary" type="submit" large outline>Submit</button>
     </ion-item>
   </form>
 </ion-content>
