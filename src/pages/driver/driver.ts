@@ -44,7 +44,12 @@ export class DriverPage {
     private af: AngularFire,
     private eh: ErrorHandler
   ) {
-    this.driverTrips = af.database.list("/trips/" + af.auth.getAuth().uid + "/driver");
+      this.af.auth.subscribe(auth => {
+        if (auth) {
+          console.log('auth driver', auth);
+          this.driverTrips = af.database.list("/trips/" + auth.uid + "/driver");
+        }
+      });
 
     // View already existing trip
     this.trip = params.get('trip');

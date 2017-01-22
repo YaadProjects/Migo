@@ -38,6 +38,7 @@ export interface TripObjectInterface {
   endTime?: string; // same for this
   createdAt?: number | string; //ToDo: do we need this?
   type?: TripTypeEnum; // This is a number [0, 1]
+  cpm?: number;
 
 }
 

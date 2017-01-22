@@ -38,7 +38,11 @@ export class PassengerPage {
     public eh: ErrorHandler,
     private toastCtrl: ToastController
   ) {
-    this.passengerTrips = this.af.database.list('/trips/' + af.auth.getAuth().uid +'/passenger');
+      this.af.auth.subscribe(auth => {
+        if (auth) {
+          this.passengerTrips = af.database.list("/trips/" + auth.uid + "/passenger");
+        }
+      });
    }
 
   ionViewDidLoad() {

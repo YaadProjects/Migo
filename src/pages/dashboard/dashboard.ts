@@ -19,7 +19,12 @@ export class Dashboard {
     private af: AngularFire,
     public navCtrl: NavController,
   ) {
-    this.tripsAsDriver = af.database.list("/trips/" + af.auth.getAuth().uid + "/driver");
+    this.af.auth.subscribe(auth => {
+      if (auth) {
+        console.log('dash', auth);
+        this.tripsAsDriver = af.database.list("/trips/" + auth.uid + "/driver");
+      }
+    })
     // this.tripsAsPassenger = af.database.list("/trips/" + af.auth.getAuth().uid + "/passenger");
   }
 

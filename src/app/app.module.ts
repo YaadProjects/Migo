@@ -13,18 +13,19 @@ import { MyApp } from './app.component';
 import { UserSelectionPage } from '../pages/user-selection/user-selection';
 import { DriverPage } from '../pages/driver/driver';
 import { PassengerPage } from '../pages/passenger/passenger';
-import { TripMapPage } from '../pages/trip-map/trip-map';
 import { LoginPage } from '../pages/login/login';
 import { Dashboard } from '../pages/dashboard/dashboard';
 
 //services
-import { UserService } from '../providers/user';
 import { ErrorHandler } from '../providers/errorhandler';
 import { Auth } from '../providers/auth';
 
 // pipes
 
 import {GroupBy} from '../pipes/group-by';
+
+// Cloud Deploy
+// import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 
 // export const firebaseConfig = {
 //   apiKey: "AIzaSyAM62vxsf8Vr1pdZfJdmcK-ZGMjq9l3tHk",
@@ -48,10 +49,15 @@ const commonPages = [
   UserSelectionPage,
   DriverPage,
   PassengerPage,
-  TripMapPage,
   LoginPage,
   Dashboard
 ];
+
+// const cloudSettings: CloudSettings = {
+//   'core': {
+//     'app_id': 'e8f28bb7'
+//   }
+// };
 
 @NgModule({
   declarations: [
@@ -75,7 +81,6 @@ const commonPages = [
     ...commonPages
   ],
   providers: [
-    UserService,
     Auth,
     ErrorHandler
   ]

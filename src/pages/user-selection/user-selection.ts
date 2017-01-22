@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
-// import { User, UserService } from '../../providers/user';
 
 import { appName } from '../../app-types/app-types';
 
@@ -16,7 +15,7 @@ import { Auth } from '../../providers/auth';
   selector: 'page-user-selection',
   templateUrl: 'user-selection.html'
 })
-export class UserSelectionPage implements OnInit {
+export class UserSelectionPage {
   // variables
   appTitle: string = appName;
 
@@ -24,15 +23,15 @@ export class UserSelectionPage implements OnInit {
     public navCtrl: NavController,
     public auth: Auth,
     public modalCrl: ModalController
-    ) {}
-
-  ngOnInit() {
-    this.auth.getAuth().subscribe(auth => {
-      if (!auth) {
-        let loginModal = this.modalCrl.create(LoginPage, {}, { enableBackdropDismiss: false, showBackdrop: true });
-        loginModal.present();
+    ) {
+      if (!auth.authenticated){
+        this.loginModal();
       }
-    });
+    }
+
+  loginModal() {
+    let loginModal = this.modalCrl.create(LoginPage, {}, { enableBackdropDismiss: false, showBackdrop: true });
+    loginModal.present();
   }
 
   goToDriver() {
@@ -49,5 +48,6 @@ export class UserSelectionPage implements OnInit {
 
   logout(): void {
     this.auth.logout();
+    this.loginModal();
   }
 }
