@@ -14,6 +14,7 @@
 
   <form #tripForm="ngForm" novalidate (ngSubmit)="submitTripForm($event,tripForm)">
 
+    <ion-label class="label-custom" [hidden]="canSubmit">Trip Origin</ion-label>
     <ion-item>
       <input type="text" #startLocation="ngModel"
               id="startLocation"
@@ -28,6 +29,7 @@
         Trip Start Location is required
     </small>
 
+    <ion-label class="label-custom" [hidden]="canSubmit">Trip Destination</ion-label>
     <ion-item>
       <input type="text"
               name="endLocation"
@@ -79,6 +81,7 @@
       </ion-select>
     </ion-item>
 
+    <ion-label class="label-custom" [hidden]="canSubmit">Cost Per Mile</ion-label>
     <ion-item>
       <input type="number" #cpmref="ngModel"
               id="cpmref" [(ngModel)]="trip.cpm"

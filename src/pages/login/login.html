@@ -1,20 +1,6 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title text-center class="title">
-      {{ appTitle }}
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
-
-<ion-content padding>
-  <ion-list>
-    <ion-item padding-top no-lines>
-      <button ion-button block color="secondary" large (click)="googleLogin()">Google Login</button>
-    </ion-item>
-
-    <ion-item padding-top no-lines>
-      <button ion-button block color="secondary" large (click)="facebookLogin()">Facebook Login</button>
-    </ion-item>
-  </ion-list>
+<ion-content padding class="page-background bottom-of-page">
+    <h1 class="company-text">
+      SpareSeAT
+    </h1>
+  <button ion-button block color="danger" class="login-button" large (click)="facebookLogin()">Facebook Login</button>
 </ion-content>

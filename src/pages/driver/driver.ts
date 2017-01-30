@@ -10,7 +10,7 @@ import { Dashboard } from '../dashboard/dashboard';
 import { ErrorHandler } from '../../providers/errorhandler';
 import { tripRawToDbObject, toISOStringWithTZ } from '../../app-lib/utilities';
 
-// import {GroupBy} from '../../pipes/group-by';
+import { Auth } from '../../providers/auth';
 
 @Component({
   selector: 'page-driver',
@@ -42,28 +42,24 @@ export class DriverPage {
     public gLoader: MapsAPILoader,
     private toastCtrl: ToastController,
     private af: AngularFire,
-    private eh: ErrorHandler
+    private eh: ErrorHandler,
+    private auth: Auth,
   ) {
-      this.af.auth.subscribe(auth => {
-        if (auth) {
-          console.log('auth driver', auth);
-          this.driverTrips = af.database.list("/trips/" + auth.uid + "/driver");
-        }
-      });
+      this.driverTrips = af.database.list("/trips/" + auth.uid + "/driver");
 
-    // View already existing trip
-    this.trip = params.get('trip');
+      // View already existing trip
+      this.trip = params.get('trip');
 
-    if (this.trip) {
-      this.canSubmit = false;
-      this.startTripLocation = this.trip.startLocation.formatted_address;
-      this.endTripLocation = this.trip.endLocation.formatted_address;
-      this.initAddressAutoComplete();
-    } else {
-      // new trip
-      this.trip = { userType: USERTYPES.driver.name } ;
+      if (this.trip) {
+        this.canSubmit = false;
+        this.startTripLocation = this.trip.startLocation.formatted_address;
+        this.endTripLocation = this.trip.endLocation.formatted_address;
+        this.initAddressAutoComplete();
+      } else {
+        // new trip
+        this.trip = { userType: USERTYPES.driver.name } ;
+      }
     }
-  }
 
   ionViewDidLoad() {
     // setup GoogleMaps, Trip type

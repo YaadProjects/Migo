@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar class="my-bar">
     <ion-title text-center class="title">
       {{ appTitle }}
     </ion-title>
@@ -8,34 +8,26 @@
 
 <ion-content padding>
   <h1 text-center>
-    Hello {{auth.displayName}}
+    Hello {{displayName}}
   </h1>
 
-  <ion-item padding-top no-lines>
     <button ion-button block  color="primary"
             large (click)="goToDriver()">
             Post a Ride
     </button>
-  </ion-item>
 
-  <ion-item padding-top no-lines>
-    <button ion-button block  color="secondary"
+    <button ion-button block  color="primary"
             large (click)="goToPassenger()">
             Hitch a Ride
     </button>
-  </ion-item>
 
-  <ion-item padding-top no-lines>
-    <button ion-button block  color="secondary"
+    <button ion-button block  color="primary"
             large (click)="goToDashboard()">
             Dashboard
     </button>
-  </ion-item>
 
-   <ion-item padding-top no-lines>
     <button ion-button block  color="danger"
             large (click)="logout()">
             Logout
     </button>
-  </ion-item>
 </ion-content>

@@ -20,14 +20,14 @@ export class UserSelectionPage {
   appTitle: string = appName;
 
   constructor(
-    public navCtrl: NavController,
-    public auth: Auth,
-    public modalCrl: ModalController
-    ) {
-      if (!auth.authenticated){
-        this.loginModal();
-      }
-    }
+    private navCtrl: NavController,
+    private auth: Auth,
+    private modalCrl: ModalController
+    ) {}
+
+  get displayName(){
+    return this.auth.displayName;
+  }
 
   loginModal() {
     let loginModal = this.modalCrl.create(LoginPage, {}, { enableBackdropDismiss: false, showBackdrop: true });
@@ -47,7 +47,6 @@ export class UserSelectionPage {
   }
 
   logout(): void {
-    this.auth.logout();
-    this.loginModal();
+    this.auth.logout().then(() => { console.log('logout'); this.loginModal(); }, (error) => {console.log(error);});
   }
 }

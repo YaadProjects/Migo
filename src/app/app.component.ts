@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
-import { UserSelectionPage } from '../pages/user-selection/user-selection';
+// import { UserSelectionPage } from '../pages/user-selection/user-selection';
+
+import { LoginPage } from '../pages/login/login';
 
 @Component({
   template: `
@@ -10,7 +12,7 @@ import { UserSelectionPage } from '../pages/user-selection/user-selection';
 })
 export class MyApp {
   // Vars
-  rootPage = UserSelectionPage;
+  rootPage = LoginPage;
 
   constructor(platform: Platform) {
     platform.ready().then(() => {

@@ -11,21 +11,35 @@ import { AuthProviders, AngularFireAuth, FirebaseAuthState, AuthMethods, Angular
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 
+import { Subject } from 'rxjs/Subject';
+
 
 @Injectable()
 export class Auth {
 
-  userData:any;
-  private authState: FirebaseAuthState;
+  private authState: FirebaseAuthState = null;
+  // login and logout
+  public stateChangeEvent = new Subject();
 
   constructor(public http: Http,
     public auth$: AngularFireAuth,
     private af: AngularFire,
     private platform: Platform) {
-      this.authState = auth$.getAuth();
       auth$.subscribe((state: FirebaseAuthState) => {
+        console.log('state', state);
         this.authState = state;
+        if(state) {
+          console.log('login event sent');
+          this.stateChangeEvent.next('login');
+        } else {
+          console.log('logged out', state);
+          this.stateChangeEvent.next('logout');
+        }
       });
+  }
+
+  get uid():String {
+    return String(this.authState.uid);
   }
 
   get authenticated(): boolean {
@@ -33,13 +47,12 @@ export class Auth {
   }
 
   get displayName():String {
-    return this.authState && this.authState.facebook.displayName;
+    return this.authState && ( this.authState.auth && this.authState.auth.displayName);
   }
-
 
   loginWithFacebook(){
     this.signinWithFacebook()
-    .then((authFacebookData) => this.saveUserData(authFacebookData))
+    .then((authFacebookData) => this.saveUserData(authFacebookData));
   }
 
   signinWithFacebook(): firebase.Promise<FirebaseAuthState | FacebookLoginResponse> {
@@ -58,16 +71,9 @@ export class Auth {
     }
   }
 
-  loginWithGoogle() {
-    this.auth$.login({
-      provider: AuthProviders.Google,
-      method: AuthMethods.Popup
-    })
-  }
-
-  logout(): void {
-    this.auth$.logout();
+  logout(): Promise<any> {
     this.authState = null;
+    return this.auth$.logout();
   }
 
   saveUserData(authData) {
@@ -87,35 +93,4 @@ export class Auth {
         }).then(user => console.log('User created successfully'));
       });
   }
-
-  // loginError(error) {
-  //   let auth = this.firebase.auth();
-  //   if (error.code === 'auth/account-exists-with-different-credential') {
-  //     let {email, credential} = error;
-  //     auth
-  //       .fetchProvidersForEmail(email)
-  //       .then(providers => {
-  //         let [providerName] = providers;
-  //         let providerObjet = Auth.getProviderObject(providerName);
-
-  //         auth.signInWithPopup(providerObjet)
-  //           .then(result => {
-  //             result.user.link(credential).then(function (message) {
-  //             });
-  //           })
-  //       });
-  //     return error;
-  //   }
-  //   console.error('Login Error:', error);
-  // }
-
-  // static getProviderObject(providerName) {
-  //   switch (providerName) {
-  //     case 'google.com':
-  //       return new firebase.auth.GoogleAuthProvider;
-  //     case 'facebook.com':
-  //       return new firebase.auth.FacebookAuthProvider;
-  //   }
-  // }
-
 }

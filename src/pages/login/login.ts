@@ -22,19 +22,15 @@ export class LoginPage {
     public auth$: AngularFireAuth,
     public viewCtrl: ViewController
   ) {
-      auth$.subscribe((state: FirebaseAuthState) => {
-        if (state){
-          this.dismiss().then(() => this.navCtrl.setRoot(UserSelectionPage))
-        }
-      });
+    auth.stateChangeEvent.subscribe((value) => {
+      if (value === 'login'){
+        this.navCtrl.setRoot(UserSelectionPage).then(() => this.dismiss());
+      }
+    });
   }
 
   facebookLogin(): void {
     this.auth.loginWithFacebook();
-  }
-
-  googleLogin(): void {
-    this.auth.loginWithGoogle();
   }
 
   dismiss(): Promise<any> {

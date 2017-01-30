@@ -6,6 +6,8 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { appName } from '../../app-types/app-types';
 import { DriverPage } from '../driver/driver';
 
+import { Auth } from '../../providers/auth';
+
 @Component({
   selector: 'page-dashboard',
   templateUrl: 'dashboard.html',
@@ -17,15 +19,10 @@ export class Dashboard {
 
   constructor(
     private af: AngularFire,
+    private auth: Auth,
     public navCtrl: NavController,
   ) {
-    this.af.auth.subscribe(auth => {
-      if (auth) {
-        console.log('dash', auth);
-        this.tripsAsDriver = af.database.list("/trips/" + auth.uid + "/driver");
-      }
-    })
-    // this.tripsAsPassenger = af.database.list("/trips/" + af.auth.getAuth().uid + "/passenger");
+      this.tripsAsDriver = af.database.list("/trips/" + auth.uid + "/driver");
   }
 
   takeToDriverPage(tripObj) {

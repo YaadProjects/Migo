@@ -10,6 +10,8 @@ import { Dashboard } from '../dashboard/dashboard';
 import { ErrorHandler } from '../../providers/errorhandler';
 import { tripRawToDbObject, toISOStringWithTZ } from '../../app-lib/utilities';
 
+import { Auth } from '../../providers/auth';
+
 @Component({
   selector: 'page-passenger',
   templateUrl: 'passenger.html',
@@ -36,13 +38,10 @@ export class PassengerPage {
     public gLoader: MapsAPILoader,
     public af: AngularFire,
     public eh: ErrorHandler,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private auth:Auth,
   ) {
-      this.af.auth.subscribe(auth => {
-        if (auth) {
-          this.passengerTrips = af.database.list("/trips/" + auth.uid + "/passenger");
-        }
-      });
+      this.passengerTrips = af.database.list("/trips/" + auth.uid + "/passenger");
    }
 
   ionViewDidLoad() {

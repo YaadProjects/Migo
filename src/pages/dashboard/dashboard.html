@@ -5,17 +5,10 @@
 </ion-header>
 
 <ion-content>
-  <!--<ion-list inset>
-    <button ion-item *ngFor="let trip of tripsAsDriver | async | groupby:'startTime'" (click)="takeToDriverPage(trip)">
-      {{ trip.startLocation.name }} To {{ trip.endLocation.name }}
-    </button>
-  </ion-list>-->
   <ion-item-group inset *ngFor="let group of tripsAsDriver | async | groupby:'startTime'">
     <ion-item-divider class="divider">{{displayDay(group.name)}}</ion-item-divider>
     <button ion-item *ngFor="let trip of group.trips" (click)="takeToDriverPage(trip)">
       {{ trip.startLocation.name }} To {{ trip.endLocation.name }}
     </button>
   </ion-item-group>
-
-
 </ion-content>
