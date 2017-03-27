@@ -6,7 +6,6 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { TripTypeEnum, TripObjectInterface, USERTYPES,  appName } from '../../app-types/app-types';
 
 import { GoogleMapsAPIWrapper, MapsAPILoader } from 'angular2-google-maps/core';
-import { Dashboard } from '../dashboard/dashboard';
 import { ErrorHandler } from '../../providers/errorhandler';
 import { tripRawToDbObject, toISOStringWithTZ } from '../../app-lib/utilities';
 
@@ -113,12 +112,12 @@ export class PassengerPage {
     if (tripFrom.valid && this.tripDatesOk()) {
       //check if dates are valid
       let myDbOBject = tripRawToDbObject(this.trip);
-      this.passengerTrips.push(myDbOBject)
-        .then(() =>
-          this.navCtrl.push(Dashboard, {
-            trip: this.trip
-          })
-        ).catch(this.eh.handle);
+      this.passengerTrips.push(myDbOBject);
+        // .then(() =>
+        //   // this.navCtrl.push(Dashboard, {
+        //   //   trip: this.trip
+        //   // })
+        // ).catch(this.eh.handle);
     }
   }
 }

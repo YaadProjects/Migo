@@ -12,10 +12,10 @@ import { Auth } from '../../providers/auth';
   selector: 'page-dashboard',
   templateUrl: 'dashboard.html',
 })
-export class Dashboard {
+export class MyTripsPage {
   appTitle :string = appName;
   tripsAsDriver: FirebaseListObservable<any>;
-  // tripsAsPassenger: FirebaseListObservable<any>;
+  rootPage:Component;
 
   constructor(
     private af: AngularFire,
@@ -31,6 +31,10 @@ export class Dashboard {
 
   displayDay(date){
     return new Date(date.replace(/-/g, '/')).toDateString();
+  }
+
+  directToDriverPage() {
+    this.navCtrl.push(DriverPage);
   }
 
 }

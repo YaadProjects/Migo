@@ -6,11 +6,13 @@ import { TripTypeEnum, TripObjectInterface, USERTYPES, appName } from '../../app
 
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { GoogleMapsAPIWrapper, MapsAPILoader } from 'angular2-google-maps/core';
-import { Dashboard } from '../dashboard/dashboard';
+import { MyTripsPage } from '../dashboard/dashboard';
 import { ErrorHandler } from '../../providers/errorhandler';
 import { tripRawToDbObject, toISOStringWithTZ } from '../../app-lib/utilities';
 
 import { Auth } from '../../providers/auth';
+
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'page-driver',
@@ -127,11 +129,14 @@ export class DriverPage {
     ev.preventDefault();
 
     if (tripFrom.valid && this.tripDatesOk()) {
-      //check if dates are valid
+
+      this.trip.createdAt = firebase.database.ServerValue.TIMESTAMP;
+
       let myDbOBject = tripRawToDbObject(this.trip);
+
       this.driverTrips.push(myDbOBject)
         .then(() =>
-          this.navCtrl.push(Dashboard, {
+          this.navCtrl.push(MyTripsPage, {
             trip: this.trip
           })
         ).catch(this.eh.handle);

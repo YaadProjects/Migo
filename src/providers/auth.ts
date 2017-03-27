@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { Platform } from 'ionic-angular';
@@ -12,33 +12,37 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 
 import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 
 @Injectable()
-export class Auth {
+export class Auth implements OnDestroy {
 
   private authState: FirebaseAuthState = null;
   // login and logout
   public stateChangeEvent = new Subject();
+  private authSubscription:Subscription;
 
   constructor(public http: Http,
     public auth$: AngularFireAuth,
     private af: AngularFire,
     private platform: Platform) {
-      auth$.subscribe((state: FirebaseAuthState) => {
+      this.authSubscription = auth$.subscribe((state: FirebaseAuthState) => {
         console.log('state', state);
         this.authState = state;
-        if(state) {
-          console.log('login event sent');
-          this.stateChangeEvent.next('login');
-        } else {
+        if(!state) {
           console.log('logged out', state);
           this.stateChangeEvent.next('logout');
         }
       });
   }
 
+  ngOnDestroy() {
+   this.authSubscription.unsubscribe();
+  }
+
   get uid():String {
+    console.log('uid');
     return String(this.authState.uid);
   }
 
@@ -77,20 +81,33 @@ export class Auth {
   }
 
   saveUserData(authData) {
-    let {uid, displayName, email, providerData } = authData;
+
+    let uid = authData.uid,
+        userType:String = 'none',
+        displayName = authData.auth.providerData[0].displayName,
+        email = authData.auth.providerData[0].email,
+        providerData = authData.auth.providerData[0];
+
     let userObj: FirebaseObjectObservable<any> = this.af.database.object(`users/${uid}`);
+
     return userObj
       .take(1)
       .subscribe(userData => {
         if (userData.$exists()) {
-          return true;
+          userType = userData.userType;
+          console.log('User loggedin successfully');
+        } else {
+          userObj.set({
+            uid,
+            displayName,
+            email,
+            providerData
+          })
+          .then(user => {
+            console.log('User created successfully');
+          });
         }
-        userObj.set({
-          uid,
-          displayName,
-          email,
-          providerData
-        }).then(user => console.log('User created successfully'));
+        this.stateChangeEvent.next('login' + ':' + userType);
       });
   }
 }

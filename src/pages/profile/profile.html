@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar class="my-bar" hideBackButton="true">
+    <button ion-button menuToggle [disabled]="!this.selectDisabled">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title text-center class="title">
+      {{ appTitle }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form #profileForm="ngForm" novalidate (ngSubmit)="submit($event,profileForm)">
+    <h1 text-center>
+      Hello <p>{{ (profileObservable | async)?.displayName }}</p>
+    </h1>
+
+    <ion-item>
+      <ion-label>What kind of User you are ?</ion-label>
+      <ion-select name="userType"
+                  #userType="ngModel"
+                  [(ngModel)]="selectedUserType"
+                  [disabled]="selectDisabled"
+                  required placeholder="None">
+        <ion-option [value]="userTypes.driver">Driver</ion-option>
+        <ion-option [value]="userTypes.passenger">Passenger</ion-option>
+      </ion-select>
+    </ion-item>
+    <small padding-left color="danger"
+          [hidden]="userType.valid || !profileForm.submitted">
+          Should be either Driver / Passenger
+    </small>
+
+    <ion-item no-lines>
+      <button block ion-button [disabled]="selectDisabled" color="secondary" type="submit" large outline>Submit</button>
+    </ion-item>
+  </form>
+
+</ion-content>

@@ -15,6 +15,7 @@ import { DriverPage } from '../pages/driver/driver';
 import { PassengerPage } from '../pages/passenger/passenger';
 import { LoginPage } from '../pages/login/login';
 import { Dashboard } from '../pages/dashboard/dashboard';
+import { ProfilePage } from '../pages/profile/profile';
 
 //services
 import { ErrorHandler } from '../providers/errorhandler';
@@ -50,7 +51,8 @@ const commonPages = [
   DriverPage,
   PassengerPage,
   LoginPage,
-  Dashboard
+  Dashboard,
+  ProfilePage
 ];
 
 // const cloudSettings: CloudSettings = {

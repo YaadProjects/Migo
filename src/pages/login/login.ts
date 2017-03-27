@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, ViewController } from 'ionic-angular';
-import { AngularFireAuth, FirebaseAuthState } from 'angularfire2';
+import { AngularFire } from 'angularfire2';
 
 import { appName } from '../../app-types/app-types';
 
 import { Auth } from '../../providers/auth';
-import { UserSelectionPage } from '../user-selection/user-selection';
+import { ProfilePage } from '../profile/profile';
+import { MyTripsPage } from '../dashboard/dashboard';
 
 
 @Component({
@@ -19,12 +20,33 @@ export class LoginPage {
   constructor(
     public navCtrl: NavController,
     public auth: Auth,
-    public auth$: AngularFireAuth,
+    private af: AngularFire,
+
+    // public auth$: AngularFireAuth,
     public viewCtrl: ViewController
   ) {
-    auth.stateChangeEvent.subscribe((value) => {
-      if (value === 'login'){
-        this.navCtrl.setRoot(UserSelectionPage).then(() => this.dismiss());
+    auth.stateChangeEvent.subscribe((value:String) => {
+      console.log('value login', value);
+      if (value.includes('login')){
+        // Check the profile info
+        // No Profile direct him to fill out the profile
+        // If Driver take him to My trips Page
+        // If Passenger take him to Show All Trips
+        if (value.includes('driver')) {
+          this.navCtrl.setRoot(MyTripsPage).then(() => {
+            this.dismiss();
+          });
+        } else if (value.includes('passenger')) {
+          // this.navCtrl.setRoot(ProfilePage).then(() => {
+          //   this.dismiss();
+          // });
+        } else {
+          this.navCtrl.setRoot(ProfilePage).then(() => {
+            this.dismiss();
+          });
+        }
+      } else {
+        this.navCtrl.setRoot(LoginPage);
       }
     });
   }

@@ -36,7 +36,8 @@ export interface TripObjectInterface {
   };
   startTime?: string; //ToDo: need to decide if we want to store timeStamp i guess that will be amazing
   endTime?: string; // same for this
-  createdAt?: number | string; //ToDo: do we need this?
+  createdAt?: Object ;
+  updateAt?: Object ;
   type?: TripTypeEnum; // This is a number [0, 1]
   cpm?: number;
 
@@ -61,6 +62,6 @@ export interface TripObjectInDB {
   };
   startTime?: string; //ToDo: need to decide if we want to store timeStamp i guess that will be amazing
   endTime?: string; // same for this
-  createdAt?: number | string; //ToDo: do we need this?
+  createdAt?: Object; //ToDo: do we need this?
   type?: TripTypeEnum; // This is a number [0, 1]
 }
