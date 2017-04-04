@@ -14,3 +14,30 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.toolbar-background {
+  background-color: #4f4f5a !important;
+}
+
+.page-background {
+  background-image: url('../img/icon.png');
+  background-repeat:no-repeat;
+  background-size:cover;
+  overflow:hidden;
+}
+
+ion-title > div {
+  color: #fff !important;
+}
+
+ion-navbar > button {
+  color: #fff !important;
+}
+
+h1 {
+  padding: 20px;
+}
+
+h1, h2  {
+  color: #333c4c !important;
+}

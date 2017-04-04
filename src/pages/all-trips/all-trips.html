@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar hideBackButton="true">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{appTitle}} All Trips</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-item-group inset *ngFor="let group of trips | groupby:'startTime'">
+    <ion-item-divider class="divider">{{displayDay(group.name)}}</ion-item-divider>
+    <ion-item text-wrap *ngFor="let trip of group.trips">
+      {{ trip.startLocation.name }} To {{ trip.endLocation.name }}
+      <span style="color:green;font-weight: 500;font-size: larger">${{trip.cpm}} per mile</span>
+      <button ion-button color="primary" (click)="confirmTrip(trip)">
+        Select
+      </button>
+    </ion-item>
+  </ion-item-group>
+</ion-content>

@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-navbar hideBackButton="true">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{appTitle}} Trip Confirmation</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      You will be riding with <ion-badge color="secondary">Prasad C</ion-badge>
+      <p class="margin-top-10" text-center>On <ion-badge color="secondary">{{(driverTrip && driverTrip.startTime)}}</ion-badge></p>
+    </ion-card-header>
+    <ion-list>
+      <ion-item text-wrap>
+        <ion-badge class="fix-width-125" color="light">Start From:</ion-badge>
+        <ion-badge color="secondary">
+          {{ passengerTrip && passengerTrip.startLocation.formatted_address }}
+        </ion-badge>
+      </ion-item>
+      <ion-item text-wrap>
+        <ion-badge class="fix-width-125" color="light">Destination:</ion-badge>
+        <ion-badge color="secondary">
+          {{  passengerTrip && passengerTrip.endLocation.formatted_address }}
+        </ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-badge class="fix-width-125" color="light">Distance of:</ion-badge>
+        <ion-badge color="secondary">
+          {{ distance().toFixed(2) }} Miles
+        </ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-badge class="fix-width-125" color="light">Cost Per Mile:</ion-badge>
+        <ion-badge color="secondary">
+          ${{ driverTrip && driverTrip.cpm }}
+        </ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-badge class="fix-width-125" color="light">Trip Cost:</ion-badge>
+        <ion-badge color="secondary">
+          ${{ (distance() * (driverTrip && driverTrip.cpm)).toFixed(2) }}
+        </ion-badge>
+      </ion-item>
+    </ion-list>
+    <ion-card-content>
+      Driver will be starting from <b>{{driverTrip && driverTrip.startLocation.formatted_address}}</b> and his destination is
+      <b>{{driverTrip && driverTrip.endLocation.formatted_address}}</b>.
+    </ion-card-content>
+  </ion-card>
+  <ion-item  no-lines>
+    <button ion-button color="primary" (click)="confirmTrip()" item-right>
+      confirmTrip
+    </button>
+  </ion-item>
+
+</ion-content>

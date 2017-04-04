@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar class="my-bar" hideBackButton="true">
+    <button ion-button menuToggle [disabled]="!isExistingUser">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title text-center class="title">
+      {{ appTitle }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h2 text-center>
+   <p [hidden]="isExistingUser"> Hello </p>
+   <p>{{ (profileObservable | async)?.displayName }}</p>
+  </h2>
+  <p class="padding-left-right-20" [hidden]="isExistingUser">
+    We would be needing more information for setting up your profile, please provide appropriate information below and submit.
+  </p>
+  <form #profileForm="ngForm"
+        novalidate (ngSubmit)="submit($event,profileForm)">
+    <ion-item>
+      <ion-label [hidden]="isExistingUser">Do you want be Driver Or Passenger</ion-label>
+      <ion-label [hidden]="!isExistingUser">Drive Type</ion-label>
+      <ion-select name="userType"
+                  #userType="ngModel"
+                  [(ngModel)]="selectedUserType"
+                  [disabled]="isExistingUser"
+                  required placeholder="?">
+        <ion-option [value]="userTypes.driver">Driver</ion-option>
+        <ion-option [value]="userTypes.passenger">Passenger</ion-option>
+      </ion-select>
+    </ion-item>
+    <small padding-left color="danger"
+           [hidden]="userType.valid || !profileForm.submitted">
+          Please select user-type
+    </small>
+
+    <ion-item no-lines padding>
+      <button block ion-button [disabled]="isExistingUser" color="primary" type="submit" large outline>Submit</button>
+    </ion-item>
+  </form>
+
+</ion-content>
