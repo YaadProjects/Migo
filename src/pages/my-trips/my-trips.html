@@ -8,10 +8,13 @@
 </ion-header>
 
 <ion-content>
-  <ion-item-group inset *ngFor="let group of tripsAsDriver | async | groupby:'startTime'">
+  <ion-item-group inset *ngFor="let group of userTrips | async | groupby:'startTime'">
     <ion-item-divider class="divider">{{displayDay(group.name)}}</ion-item-divider>
-    <button ion-item *ngFor="let trip of group.trips" (click)="takeToDriverPage(trip)">
+    <button ion-item *ngFor="let trip of group.trips" (click)="takeToDriverOrPassengerPage(trip)">
       {{ trip.startLocation.name }} To {{ trip.endLocation.name }}
+      <ion-badge color="{{tripStatusWithColor(trip).color}}">
+        {{tripStatusWithColor(trip).status}}
+      </ion-badge>
     </button>
   </ion-item-group>
 </ion-content>

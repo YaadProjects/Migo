@@ -10,12 +10,13 @@ import { DirectionsMapDirective } from '../components/sebm-google-map-directions
 //pages
 import { MyApp } from './app.component';
 
-import { UserSelectionPage } from '../pages/user-selection/user-selection';
 import { DriverPage } from '../pages/driver/driver';
 import { PassengerPage } from '../pages/passenger/passenger';
 import { LoginPage } from '../pages/login/login';
-import { Dashboard } from '../pages/dashboard/dashboard';
+import { MyTripsPage } from '../pages/my-trips/my-trips';
 import { ProfilePage } from '../pages/profile/profile';
+import { AllTripsPage } from '../pages/all-trips/all-trips';
+import { PassengerTripConfirmPage } from '../pages/passenger-trip-confirm/passenger-trip-confirm';
 
 //services
 import { ErrorHandler } from '../providers/errorhandler';
@@ -47,12 +48,13 @@ export const firebaseConfig = {
 // create commonArray for the declarations and entryComponents
 const commonPages = [
   MyApp,
-  UserSelectionPage,
   DriverPage,
   PassengerPage,
   LoginPage,
-  Dashboard,
-  ProfilePage
+  MyTripsPage,
+  ProfilePage,
+  AllTripsPage,
+  PassengerTripConfirmPage,
 ];
 
 // const cloudSettings: CloudSettings = {

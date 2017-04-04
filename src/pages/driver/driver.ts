@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, NavParams } from 'ionic-angular';
+import { NavController, ToastController, NavParams, MenuController } from 'ionic-angular';
 
 //types
-import { TripTypeEnum, TripObjectInterface, USERTYPES, appName } from '../../app-types/app-types';
+import { TripTypeEnum, TripObjectInterface, USERTYPES, appName, TripStatusEnum } from '../../app-types/app-types';
 
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { GoogleMapsAPIWrapper, MapsAPILoader } from 'angular2-google-maps/core';
-import { MyTripsPage } from '../dashboard/dashboard';
+
+import { MyTripsPage } from '../my-trips/my-trips';
 import { ErrorHandler } from '../../providers/errorhandler';
 import { tripRawToDbObject, toISOStringWithTZ } from '../../app-lib/utilities';
 
@@ -46,7 +47,10 @@ export class DriverPage {
     private af: AngularFire,
     private eh: ErrorHandler,
     private auth: Auth,
+    private menu: MenuController
   ) {
+      this.menu.swipeEnable(false);
+
       this.driverTrips = af.database.list("/trips/" + auth.uid + "/driver");
 
       // View already existing trip
@@ -59,7 +63,7 @@ export class DriverPage {
         this.initAddressAutoComplete();
       } else {
         // new trip
-        this.trip = { userType: USERTYPES.driver.name } ;
+        this.trip = { userType: USERTYPES.driver.name, status: TripStatusEnum.Requested } ;
       }
     }
 
@@ -98,6 +102,10 @@ export class DriverPage {
     });
   }
 
+  // distance() {
+  //   this.trip.startLocation
+  // }
+
   _areDatesValid(): boolean {
     this.dummyStartTime = (this.trip.startTime) ? +new Date(this.trip.startTime) : 0;
     if (this.dummyStartTime) {
@@ -131,14 +139,17 @@ export class DriverPage {
     if (tripFrom.valid && this.tripDatesOk()) {
 
       this.trip.createdAt = firebase.database.ServerValue.TIMESTAMP;
+      this.trip.authId = this.auth.uid;
 
       let myDbOBject = tripRawToDbObject(this.trip);
 
       this.driverTrips.push(myDbOBject)
-        .then(() =>
+        .then(() => {
+          this.navCtrl.remove(0);
           this.navCtrl.push(MyTripsPage, {
             trip: this.trip
-          })
+          });
+          }
         ).catch(this.eh.handle);
     }
   }

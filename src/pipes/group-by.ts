@@ -10,6 +10,8 @@ export class GroupBy implements PipeTransform {
     let currenDate:string;
     let currentGroup:Array<any>;
 
+    console.log('trips', trips);
+
     if (trips) {
       trips.forEach(function(trip){
         if (currenDate !== trip.startTime.substr(0,10)){

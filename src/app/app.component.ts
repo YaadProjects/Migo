@@ -1,15 +1,18 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform , Nav} from 'ionic-angular';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
+import { Platform , Nav, NavController} from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { LoginPage } from '../pages/login/login';
 import { DriverPage } from '../pages/driver/driver';
-import { Dashboard } from '../pages/dashboard/dashboard';
+import { MyTripsPage } from '../pages/my-trips/my-trips';
 import { ProfilePage } from '../pages/profile/profile';
 
 import { PassengerPage } from '../pages/passenger/passenger';
+import { AllTripsPage } from '../pages/all-trips/all-trips';
 
 import {Auth} from '../providers/auth';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   template: `
@@ -33,19 +36,22 @@ import {Auth} from '../providers/auth';
   <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
    `
 })
-export class MyApp {
+export class MyApp  implements OnDestroy {
   // Vars
   rootPage = LoginPage;
   @ViewChild(Nav) nav;
   driverPage = { title: 'New Trip', component : DriverPage  };
   profilePage = { title: 'Profile', component: ProfilePage };
-  dashboardPage = { title: 'My Trips', component: Dashboard };
+  dashboardPage = { title: 'My Trips', component: MyTripsPage };
   passengerPage = { title: 'New Trip', component: PassengerPage};
+  allTripsPage = { title: 'All Driver Trip', component: AllTripsPage};
+  loginSubscription:Subscription;
 
   MenuPages:Array<any> = [];
 
   constructor(platform: Platform,
               public auth: Auth,
+              // private navCtrl: NavController
               ) {
 
     this.auth = auth;
@@ -58,9 +64,9 @@ export class MyApp {
       Splashscreen.hide();
     });
 
-    auth.stateChangeEvent.subscribe((value) => {
-      if (value =~ 'login') {
-        if(value =~ 'driver') {
+    this.loginSubscription = this.auth.stateChangeEvent.subscribe((value:String) => {
+      if (value.includes('login')) {
+        if(value.includes('driver')) {
           this.MenuPages = [
             this.driverPage,
             this.profilePage,
@@ -69,6 +75,7 @@ export class MyApp {
         } else {
           this.MenuPages = [
             this.passengerPage,
+            this.allTripsPage,
             this.profilePage,
             this.dashboardPage
           ];
@@ -78,11 +85,19 @@ export class MyApp {
   }
 
   openPage(page) {
-    this.rootPage = page.component;
+    if (this.rootPage.name === page.component.name) {
+      this.nav.goToRoot();
+    } else {
+      this.rootPage = page.component;
+    }
   }
 
   logout(){
     // this.nav.push(LoginPage);
     this.auth.logout();
+  }
+
+  ngOnDestroy() {
+    this.loginSubscription.unsubscribe();
   }
 }

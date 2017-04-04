@@ -77,16 +77,26 @@ export class Auth implements OnDestroy {
 
   logout(): Promise<any> {
     this.authState = null;
+    // this.stateChangeEvent.unsubscribe();
     return this.auth$.logout();
   }
 
   saveUserData(authData) {
-
-    let uid = authData.uid,
+    let uid,
         userType:String = 'none',
-        displayName = authData.auth.providerData[0].displayName,
-        email = authData.auth.providerData[0].email,
-        providerData = authData.auth.providerData[0];
+        displayName, email, providerData;
+
+    if (this.platform.is('cordova')) {
+      uid = authData.uid,
+      displayName = authData.displayName,
+      email = authData.email,
+      providerData = authData.providerData[0];
+    } else {
+      uid = authData.uid,
+      displayName = authData.auth.providerData[0].displayName,
+      email = authData.auth.providerData[0].email,
+      providerData = authData.auth.providerData[0];
+    }
 
     let userObj: FirebaseObjectObservable<any> = this.af.database.object(`users/${uid}`);
 

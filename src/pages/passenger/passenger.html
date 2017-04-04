@@ -47,7 +47,7 @@
       <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
                     [(ngModel)]="trip.startTime" [min]="currentTime"
                     [max]="maxTimeAccepted"
-                    name='startDate' (ionChange)="changeMaxTime($event)"
+                    name='startDate'
                     required placeholder="startTime"
                     #startTime="ngModel">
       </ion-datetime>
@@ -55,22 +55,6 @@
     <small padding-left color="danger"
             [hidden]="startTime.valid || !tripForm.submitted">
       Trip Start Time is required
-    </small>
-
-    <ion-item>
-      <ion-label floating>Trip End Time(est.)</ion-label>
-      <ion-datetime displayFormat="MMM DD, YYYY HH:mm"
-                    [min]="trip.startTime" [max]="endMaxTimeAccepted"
-                    [(ngModel)]="trip.endTime"
-                    (ionChange)="tripDatesOk()"
-                    #endTime='ngModel'
-                    required
-                    name="endDate">
-      </ion-datetime>
-    </ion-item>
-    <small padding-left color="danger"
-          [hidden]="endTime.valid || (!tripForm.submitted)">
-      Trip End Time is required
     </small>
 
     <ion-item>

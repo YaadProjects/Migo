@@ -5,6 +5,14 @@ export enum TripTypeEnum {
   Round
 }
 
+export enum TripStatusEnum {
+  Requested,
+  PendingConfirmation,
+  Completed,
+  NoMatch,
+  Cancelled
+}
+
 export const USERTYPES = {
   driver: {
     name: 'driver'
@@ -40,7 +48,8 @@ export interface TripObjectInterface {
   updateAt?: Object ;
   type?: TripTypeEnum; // This is a number [0, 1]
   cpm?: number;
-
+  status: TripStatusEnum;
+  authId?: String;
 }
 
 export interface TripObjectInDB {
@@ -64,4 +73,6 @@ export interface TripObjectInDB {
   endTime?: string; // same for this
   createdAt?: Object; //ToDo: do we need this?
   type?: TripTypeEnum; // This is a number [0, 1]
+  status: TripStatusEnum;
+  authId?: String;
 }
