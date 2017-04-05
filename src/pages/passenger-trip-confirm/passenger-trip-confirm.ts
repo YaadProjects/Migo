@@ -5,7 +5,7 @@ import { Auth } from '../../providers/auth';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 import { Subscription } from 'rxjs/Subscription';
-import { TripStatusEnum, TripObjectInterface } from '../../app-types/app-types';
+import { TripStatusEnum } from '../../app-types/app-types';
 
 import { MyTripsPage } from '../my-trips/my-trips';
 

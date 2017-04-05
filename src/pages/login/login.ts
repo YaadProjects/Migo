@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ViewController } from 'ionic-angular';
+import { NavController, ViewController, LoadingController } from 'ionic-angular';
 
 
 import { appName } from '../../app-types/app-types';
@@ -22,15 +22,22 @@ export class LoginPage implements OnInit {
   appTitle:string = appName;
   userLoggedIn:boolean;
   loginSubscription:Subscription;
+  loader: any;
 
   constructor(
     public navCtrl: NavController,
     public auth: Auth,
-    public viewCtrl: ViewController
+    public viewCtrl: ViewController,
+    private loaderCtrl: LoadingController
   ) {
+     this.loader = this.loaderCtrl.create({
+       content: 'Please wait',
+       duration: 3000
+     });
   }
 
   facebookLogin(): void {
+    this.loader.present();
     this.auth.loginWithFacebook();
   }
 
@@ -42,6 +49,7 @@ export class LoginPage implements OnInit {
     this.loginSubscription = this.auth.stateChangeEvent.subscribe((value:String) => {
       console.log('value login', value);
       if (value.includes('login')){
+        this.loader.dismiss();
         // Check the profile info
         // No Profile direct him to fill out the profile
         // If Driver take him to My trips Page
