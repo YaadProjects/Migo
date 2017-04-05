@@ -1,5 +1,5 @@
 import { Component, OnDestroy} from '@angular/core';
-import { NavController, MenuController } from 'ionic-angular';
+import { NavController, MenuController, LoadingController } from 'ionic-angular';
 
 import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 
@@ -24,15 +24,22 @@ export class ProfilePage implements OnDestroy {
   isExistingUser:boolean;
   selectDisabled:boolean;
   profileSubscription:Subscription;
+  loader: any;
 
   constructor(
     private navCtrl: NavController,
     private af: AngularFire,
     private auth: Auth,
-    private menu: MenuController
+    private menu: MenuController,
+    public loadingCtrl: LoadingController
     ) {
       // User should be able to see the side menu ( swipe ) if he has already set-up his profile
       this.menu.swipeEnable(false);
+
+      this.loader = this.loadingCtrl.create({
+        content: 'Please wait',
+        duration: 3000
+      });
 
       this.userTypes = USERTYPES;
       this.profileObservable = af.database.object("/users/" + auth.uid );
@@ -48,8 +55,11 @@ export class ProfilePage implements OnDestroy {
     }
 
     submit(ev: Event, profileForm) {
+      this.loader.present();
+
       if (profileForm.valid) {
         this.profileObservable.update({userType: this.selectedUserType.name}).then(() => {
+          this.loader.dismiss();
           if (this.selectedUserType === this.userTypes['driver']) {
             this.navCtrl.push(MyTripsPage);
           } else {
