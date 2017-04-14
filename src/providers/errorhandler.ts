@@ -4,9 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ErrorHandler{
 
-  constructor(public ac: AlertController) {
-
-  }
+  constructor(public ac: AlertController) {}
 
   handle() {
     let alert = this.ac.create({
@@ -16,5 +14,4 @@ export class ErrorHandler{
     });
     alert.present();
   }
-
 }

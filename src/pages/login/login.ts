@@ -1,46 +1,74 @@
-import { Component, Inject } from '@angular/core';
-import { NavController, ModalController, ViewController } from 'ionic-angular';
-import { AuthMethods, AuthProviders, AngularFire, FirebaseRef } from 'angularfire2';
+import { Component, OnInit } from '@angular/core';
+import { NavController, ViewController } from 'ionic-angular';
+
+
+import { appName } from '../../app-types/app-types';
 
 import { Auth } from '../../providers/auth';
-import { UserSelectionPage } from '../user-selection/user-selection';
+
+import { Subscription } from 'rxjs/Subscription';
+
+import { ProfilePage } from '../profile/profile';
+import { MyTripsPage } from '../my-trips/my-trips';
+
+import { AllTripsPage } from '../all-trips/all-trips';
 
 
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
+  appTitle:string = appName;
+  userLoggedIn:boolean;
+  loginSubscription:Subscription;
 
-  constructor(public navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
     public auth: Auth,
-    public af: AngularFire,
-    //public modalCtrl: ModalController,
     public viewCtrl: ViewController
   ) {
-
-
-  }
-
-  ngOnInit() {
-    this.af.auth.subscribe(auth => {
-      if (auth) {
-       this.dismiss().then(() => this.navCtrl.setRoot(UserSelectionPage))
-      }
-    });
   }
 
   facebookLogin(): void {
     this.auth.loginWithFacebook();
   }
 
-  googleLogin(): void {
-    this.auth.loginWithGoogle();
-  }
-
   dismiss(): Promise<any> {
     return this.viewCtrl.dismiss();
   }
 
+  ngOnInit() {
+    this.loginSubscription = this.auth.stateChangeEvent.subscribe((value:String) => {
+      console.log('value login', value);
+      if (value.includes('login')){
+        // Check the profile info
+        // No Profile direct him to fill out the profile
+        // If Driver take him to My trips Page
+        // If Passenger take him to Show All Trips
+        if (value.includes('driver')) {
+          this.navCtrl.setRoot(MyTripsPage).then(() => {
+            this.dismiss();
+          });
+        } else if (value.includes('passenger')) {
+          this.navCtrl.setRoot(AllTripsPage).then(() => {
+            this.dismiss();
+          });
+        } else {
+          this.navCtrl.setRoot(ProfilePage).then(() => {
+            this.dismiss();
+          });
+        }
+      } else if(value.includes('logout')) {
+        this.loginSubscription.unsubscribe();
+        this.navCtrl.setRoot(LoginPage);
+      }
+    });
+  }
 
+  // ngOnDestroy() {
+  //   if (!this.loginSubscription.closed) {
+  //     this.loginSubscription.unsubscribe();
+  //   }
+  // }
 }
