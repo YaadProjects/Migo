@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, ToastController, NavParams, MenuController } from 'ionic-angular';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
+import * as firebase from 'firebase';
+
 //types
 import { TripTypeEnum, TripObjectInterface, USERTYPES,  appName, TripStatusEnum } from '../../app-types/app-types';
 
