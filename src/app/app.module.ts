@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 import { IonicApp, IonicModule } from 'ionic-angular';
+import { BrowserModule } from '@angular/platform-browser';
+import { IonicErrorHandler } from 'ionic-angular';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 import { FormsModule } from '@angular/forms';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { AngularFireModule } from 'angularfire2';
@@ -71,6 +76,8 @@ const commonPages = [
   ],
 
   imports: [
+    BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp),
     FormsModule,
     AgmCoreModule.forRoot({
@@ -86,7 +93,11 @@ const commonPages = [
   ],
   providers: [
     Auth,
-    ErrorHandler
+    StatusBar,
+    SplashScreen,
+    ErrorHandler,
+    //{provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
-export class AppModule { }
+
+export class AppModule {}

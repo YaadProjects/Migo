@@ -59,7 +59,7 @@ export class Auth implements OnDestroy {
     .then((authFacebookData) => this.saveUserData(authFacebookData));
   }
 
-  signinWithFacebook(): firebase.Promise<FirebaseAuthState | FacebookLoginResponse> {
+  signinWithFacebook(): firebase.Promise<void | FirebaseAuthState | FacebookLoginResponse> {
     if (this.platform.is('cordova')) {
       return Facebook.login(['email', 'public_profile']).then(function(res) {
         const facebookCredential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);

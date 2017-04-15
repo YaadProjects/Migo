@@ -136,7 +136,7 @@ export class DriverPage {
   submitTripForm(ev: Event, tripFrom): void {
     ev.preventDefault();
 
-    if (tripFrom.valid && this.tripDatesOk()) {
+    if (tripFrom.valid) {
 
       this.trip.createdAt = firebase.database.ServerValue.TIMESTAMP;
       this.trip.authId = this.auth.uid;
