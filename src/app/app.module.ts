@@ -31,8 +31,26 @@ import { Auth } from '../providers/auth';
 
 import {GroupBy} from '../pipes/group-by';
 
-// Cloud Deploy
-// import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+// Push Notification through ionic.io
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+
+const cloudSettings: CloudSettings = {
+  'core': {
+    'app_id': '57eddd56'
+  },
+  'push': {
+    'sender_id': '166754869050',
+    'pluginConfig': {
+      'ios': {
+        'badge': true,
+        'sound': true
+      },
+      'android': {
+        'iconColor': '#343434'
+      }
+    }
+  }
+};
 
 // export const firebaseConfig = {
 //   apiKey: "AIzaSyAM62vxsf8Vr1pdZfJdmcK-ZGMjq9l3tHk",
@@ -85,6 +103,7 @@ const commonPages = [
       apiKey: 'AIzaSyCIfjMlujO_biUyNWlFETGg7XK7z8EBRjE', libraries: ['places', 'geometry'],
       region: 'USA'
     }),
+    CloudModule.forRoot(cloudSettings),
     AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],

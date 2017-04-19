@@ -14,6 +14,11 @@ import {Auth} from '../providers/auth';
 
 import { Subscription } from 'rxjs/Subscription';
 
+import {
+  Push,
+  PushToken
+} from '@ionic/cloud-angular';
+
 @Component({
   template: `
   <ion-menu side="left" [content]="content" persistent="true">
@@ -51,6 +56,7 @@ export class MyApp  implements OnDestroy {
 
   constructor(platform: Platform,
               public auth: Auth,
+              public push: Push
               // private navCtrl: NavController
               ) {
 
@@ -66,6 +72,22 @@ export class MyApp  implements OnDestroy {
 
     this.loginSubscription = this.auth.stateChangeEvent.subscribe((value:String) => {
       if (value.includes('login')) {
+
+        this.push.register().then((t: PushToken) => {
+          console.log('token', t);
+          return this.push.saveToken(t);
+        }).then((t: PushToken) => {
+          console.log('Token saved:', t.token);
+        }, (reason:any) => {
+          console.log('Token save failed:', reason);
+        });
+
+        this.push.rx.notification()
+        .subscribe((msg) => {
+          alert(msg.title + ': ' + msg.text);
+        });
+
+
         if(value.includes('driver')) {
           this.MenuPages = [
             this.driverPage,
@@ -93,7 +115,7 @@ export class MyApp  implements OnDestroy {
   }
 
   logout(){
-    // this.nav.push(LoginPage);
+    this.push.unregister();
     this.auth.logout();
   }
 
