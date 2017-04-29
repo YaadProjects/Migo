@@ -33,6 +33,8 @@ export class Auth implements OnDestroy {
         if(!state) {
           console.log('logged out', state);
           this.stateChangeEvent.next('logout');
+        } else {
+          this.fetchUserData(state);
         }
       });
   }
@@ -42,7 +44,6 @@ export class Auth implements OnDestroy {
   }
 
   get uid():String {
-    console.log('uid');
     return String(this.authState.uid);
   }
 
@@ -56,7 +57,7 @@ export class Auth implements OnDestroy {
 
   loginWithFacebook(){
     this.signinWithFacebook()
-    .then((authFacebookData) => this.saveUserData(authFacebookData));
+    .then((authFacebookData) => this.fetchUserData(authFacebookData));
   }
 
   signinWithFacebook(): firebase.Promise<void | FirebaseAuthState | FacebookLoginResponse> {
@@ -81,10 +82,8 @@ export class Auth implements OnDestroy {
     return this.auth$.logout();
   }
 
-  saveUserData(authData) {
-    let uid,
-        userType:String = 'none',
-        displayName, email, providerData;
+  fetchUserData(authData) {
+    let uid, displayName, email, providerData;
 
     if (this.platform.is('cordova')) {
       uid = authData.uid,
@@ -97,22 +96,22 @@ export class Auth implements OnDestroy {
       email = authData.auth.providerData[0].email,
       providerData = authData.auth.providerData[0];
     }
+    const userObject = {uid,displayName,email,providerData};
+    this.getUserFromUidAndSendEvent(userObject);
+  }
 
+  private getUserFromUidAndSendEvent(userObject):void{
+    let {uid} = userObject;
     let userObj: FirebaseObjectObservable<any> = this.af.database.object(`users/${uid}`);
-
-    return userObj
+    let userType:string;
+    userObj
       .take(1)
       .subscribe(userData => {
         if (userData.$exists()) {
           userType = userData.userType;
           console.log('User loggedin successfully');
         } else {
-          userObj.set({
-            uid,
-            displayName,
-            email,
-            providerData
-          })
+          userObj.set(userObject)
           .then(user => {
             console.log('User created successfully');
           });
@@ -120,4 +119,6 @@ export class Auth implements OnDestroy {
         this.stateChangeEvent.next('login' + ':' + userType);
       });
   }
+
+
 }
