@@ -3,14 +3,10 @@ import { NavController, ViewController, LoadingController } from 'ionic-angular'
 
 
 import { appName } from '../../app-types/app-types';
-
 import { Auth } from '../../providers/auth';
-
 import { Subscription } from 'rxjs/Subscription';
-
 import { ProfilePage } from '../profile/profile';
 import { MyTripsPage } from '../my-trips/my-trips';
-
 import { AllTripsPage } from '../all-trips/all-trips';
 
 
@@ -19,9 +15,9 @@ import { AllTripsPage } from '../all-trips/all-trips';
   templateUrl: 'login.html',
 })
 export class LoginPage implements OnInit {
-  appTitle:string = appName;
-  userLoggedIn:boolean;
-  loginSubscription:Subscription;
+  appTitle: string = appName;
+  userLoggedIn: boolean;
+  loginSubscription: Subscription;
   loader: any;
 
   constructor(
@@ -30,10 +26,10 @@ export class LoginPage implements OnInit {
     public viewCtrl: ViewController,
     private loaderCtrl: LoadingController
   ) {
-     this.loader = this.loaderCtrl.create({
-       content: 'Please wait',
-       duration: 3000
-     });
+    this.loader = this.loaderCtrl.create({
+      content: 'Please wait',
+      duration: 3000
+    });
   }
 
   facebookLogin(): void {
@@ -46,32 +42,30 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    this.loginSubscription = this.auth.stateChangeEvent.subscribe((value:String) => {
+    this.loginSubscription = this.auth.stateChangeEvent.subscribe((value: String) => {
       console.log('value login', value);
-      if (value.includes('login')){
-        this.loader.dismiss();
-        // Check the profile info
-        // No Profile direct him to fill out the profile
-        // If Driver take him to My trips Page
-        // If Passenger take him to Show All Trips
-        if (value.includes('driver')) {
-          this.navCtrl.setRoot(MyTripsPage).then(() => {
-            this.dismiss();
-          });
-        } else if (value.includes('passenger')) {
-          this.navCtrl.setRoot(AllTripsPage).then(() => {
-            this.dismiss();
-          });
-        } else {
-          this.navCtrl.setRoot(ProfilePage).then(() => {
-            this.dismiss();
-          });
-        }
-      } else if(value.includes('logout')) {
+      if (value.includes('login')) {
+        this.checkUserAndNavigate(value);
+      } else if (value.includes('logout')) {
         this.loginSubscription.unsubscribe();
         this.navCtrl.setRoot(LoginPage);
       }
     });
+  }
+
+  private checkUserAndNavigate(value):void {
+    this.loader.dismiss();
+    // Check the profile info
+    // No Profile direct him to fill out the profile
+    // If Driver take him to My trips Page
+    // If Passenger take him to Show All Trips
+    if (value.includes('driver')) {
+      this.navCtrl.setRoot(MyTripsPage);
+    } else if (value.includes('passenger')) {
+      this.navCtrl.setRoot(AllTripsPage)
+    } else {
+      this.navCtrl.setRoot(ProfilePage)
+    }
   }
 
   // ngOnDestroy() {

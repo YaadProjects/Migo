@@ -87,14 +87,14 @@ export class DriverPage {
       let endLocation = new google.maps.places.Autocomplete(document.getElementById("endLocation"), {});
 
       google.maps.event.addListener(startLocation, 'place_changed', () => {
-        console.log(startLocation.getPlace());
+        //console.log(startLocation.getPlace());
         this.trip.startLocation = startLocation.getPlace().geometry;
         this.trip.startLocation.formatted_address = startLocation.getPlace().formatted_address;
         this.trip.startLocation.name = startLocation.getPlace().name;
       });
 
       google.maps.event.addListener(endLocation, 'place_changed', () => {
-        console.log(endLocation.getPlace());
+        //console.log(endLocation.getPlace());
         this.trip.endLocation = endLocation.getPlace().geometry;
         this.trip.endLocation.formatted_address = endLocation.getPlace().formatted_address;
         this.trip.endLocation.name = endLocation.getPlace().name;
@@ -106,7 +106,7 @@ export class DriverPage {
   //   this.trip.startLocation
   // }
 
-  _areDatesValid(): boolean {
+    _areDatesValid(): boolean {
     this.dummyStartTime = (this.trip.startTime) ? +new Date(this.trip.startTime) : 0;
     if (this.dummyStartTime) {
       this.dummyEndTime = + new Date(this.trip.endTime);
