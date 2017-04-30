@@ -45,7 +45,7 @@
     </ion-select>
   </ion-item>
 
-  <div class="cost-per-trip-driver" *ngIf="(userType == 'passenger')">
+  <div class="cost-per-trip-driver" *ngIf="isUserDriver">
     <ion-label class="label-custom" [hidden]="canSubmit">Cost Per Mile</ion-label>
     <ion-item>
       <input type="number" #cpmref="ngModel" id="cpmref" [(ngModel)]="trip.cpm" min="0" max="1" required class="full-width" placeholder="Cost Per Mile"

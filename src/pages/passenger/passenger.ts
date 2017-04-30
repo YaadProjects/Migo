@@ -43,11 +43,7 @@ export class PassengerPage {
     this.passengerTrips = af.database.list("/trips/" + auth.uid + "/passenger");
     // View already existing trip
     this.trip = params.get('trip');
-    this.trip = {
-      userType: USERTYPES.passenger.name,
-      type: TripTypeEnum.OneWay,
-      status: TripStatusEnum.Requested
-    }
+    
 
   }
 

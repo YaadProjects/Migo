@@ -31,6 +31,7 @@ export class NewTripFormComponent {
   canSubmit: boolean = true;
   startTripLocation: any;
   endTripLocation: any;
+  isUserDriver: boolean;
 
   constructor(
     public gApi: GoogleMapsAPIWrapper,
@@ -54,6 +55,7 @@ export class NewTripFormComponent {
   }
 
   ngAfterViewInit(){
+    this.isUserDriver = this.userType == USERTYPES.driver.name;
     this.trip.type =  TripTypeEnum.OneWay;
     this.initAddressAutoComplete();
   }
