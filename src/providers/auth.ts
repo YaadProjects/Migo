@@ -3,14 +3,11 @@ import { Http } from '@angular/http';
 
 import { Platform } from 'ionic-angular';
 import { Facebook, FacebookLoginResponse } from 'ionic-native';
-
 import * as firebase from 'firebase';
-
 import { AuthProviders, AngularFireAuth, FirebaseAuthState, AuthMethods, AngularFire, FirebaseObjectObservable} from 'angularfire2';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
-
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 

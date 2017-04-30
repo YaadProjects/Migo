@@ -1,4 +1,4 @@
-export const appName = 'SpareSeAT';
+export const APP_NAME = 'SpareSeAT';
 
 export enum TripTypeEnum {
   OneWay,

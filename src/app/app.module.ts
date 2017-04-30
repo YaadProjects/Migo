@@ -11,7 +11,7 @@ import { AngularFireModule } from 'angularfire2';
 
 //directive and components
 import { DirectionsMapDirective } from '../components/sebm-google-map-directions/sebm-google-map-directions';
-
+import { NewTripFormModule } from "../components/new-trip-form/new-trip-form.module";
 //pages
 import { MyApp } from './app.component';
 
@@ -29,7 +29,7 @@ import { Auth } from '../providers/auth';
 
 // pipes
 
-import {GroupBy} from '../pipes/group-by';
+import { GroupBy } from '../pipes/group-by';
 
 // Cloud Deploy
 // import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
@@ -72,12 +72,14 @@ const commonPages = [
   declarations: [
     ...commonPages,
     DirectionsMapDirective,
+    //NewTripForm,
     GroupBy
   ],
 
   imports: [
     BrowserModule,
     HttpModule,
+    NewTripFormModule,
     IonicModule.forRoot(MyApp),
     FormsModule,
     AgmCoreModule.forRoot({
@@ -100,4 +102,4 @@ const commonPages = [
   ]
 })
 
-export class AppModule {}
+export class AppModule { }

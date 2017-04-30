@@ -3,7 +3,7 @@ import { NavController, MenuController, LoadingController } from 'ionic-angular'
 
 import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 
-import { appName, USERTYPES } from '../../app-types/app-types';
+import { APP_NAME, USERTYPES } from '../../app-types/app-types';
 
 import { MyTripsPage } from '../my-trips/my-trips';
 import { PassengerPage } from '../passenger/passenger';
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ProfilePage implements OnDestroy {
   // variables
-  appTitle: string = appName;
+  appTitle: string = APP_NAME;
   profileObservable: FirebaseObjectObservable<any>;
   selectedUserType: any;
   userTypes: any;

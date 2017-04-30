@@ -3,7 +3,7 @@ import { NavController, MenuController } from 'ionic-angular';
 
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
-import { appName } from '../../app-types/app-types';
+import { APP_NAME } from '../../app-types/app-types';
 import { DriverPage } from '../driver/driver';
 import { PassengerPage } from '../passenger/passenger';
 
@@ -18,7 +18,7 @@ import { TripStatusEnum } from '../../app-types/app-types';
   templateUrl: 'my-trips.html',
 })
 export class MyTripsPage implements OnInit, OnDestroy {
-  appTitle :string = appName;
+  appTitle :string = APP_NAME;
   userTrips: FirebaseListObservable<any>;
   userType: String;
   userSubscription: Subscription;

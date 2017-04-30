@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, ViewController, LoadingController } from 'ionic-angular';
 
 
-import { appName } from '../../app-types/app-types';
+import { APP_NAME } from '../../app-types/app-types';
 import { Auth } from '../../providers/auth';
 import { Subscription } from 'rxjs/Subscription';
 import { ProfilePage } from '../profile/profile';
@@ -15,7 +15,7 @@ import { AllTripsPage } from '../all-trips/all-trips';
   templateUrl: 'login.html',
 })
 export class LoginPage implements OnInit {
-  appTitle: string = appName;
+  appTitle: string = APP_NAME;
   userLoggedIn: boolean;
   loginSubscription: Subscription;
   loader: any;

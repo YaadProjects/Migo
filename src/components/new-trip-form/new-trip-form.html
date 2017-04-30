@@ -1,0 +1,63 @@
+<div padding [hidden]="!canSubmit" class="message">
+  <h2>
+    Great ! Tell us a little bit about your trip.
+  </h2>
+</div>
+
+<form #tripForm="ngForm" novalidate (ngSubmit)="submitTripForm($event,tripForm)">
+
+  <ion-label class="label-custom" [hidden]="canSubmit">Trip Origin</ion-label>
+  <ion-item>
+    <input type="text" #startLocation="ngModel" id="startLocation" [(ngModel)]="startTripLocation" required placeholder="Where are you departing from?"
+      class="full-width" name="startLocation" />
+
+  </ion-item>
+  <small padding-left color="danger" [hidden]="startLocation.valid || (!tripForm.submitted)">
+        Trip Start Location is required
+    </small>
+
+  <ion-label class="label-custom" [hidden]="canSubmit">Trip Destination</ion-label>
+  <ion-item>
+    <input type="text" name="endLocation" [(ngModel)]="endTripLocation" #endLocation="ngModel" required id="endLocation" placeholder="Where are you traveling to?"
+      class="full-width" />
+  </ion-item>
+  <small padding-left color="danger" [hidden]="endLocation.valid || !tripForm.submitted">
+        Trip End Location is required
+    </small>
+
+  <ion-item>
+    <ion-label floating>Trip start time</ion-label>
+    <ion-datetime displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="trip.startTime" [min]="currentTime" [max]="maxTimeAccepted"
+      name='startDate' (ionChange)="changeMaxTime($event)" required #startTime="ngModel">
+    </ion-datetime>
+  </ion-item>
+  <small padding-left color="danger" [hidden]="startTime.valid || !tripForm.submitted">
+      Trip Start Time is required
+    </small>
+
+
+
+  <ion-item>
+    <ion-label>Trip is</ion-label>
+    <ion-select name="tripType" [(ngModel)]="trip.type">
+      <ion-option [value]="allTripType.OneWay">One Way</ion-option>
+      <ion-option [value]="allTripType.Round">Round Trip</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <div class="cost-per-trip-driver" *ngIf="(userType == 'passenger')">
+    <ion-label class="label-custom" [hidden]="canSubmit">Cost Per Mile</ion-label>
+    <ion-item>
+      <input type="number" #cpmref="ngModel" id="cpmref" [(ngModel)]="trip.cpm" min="0" max="1" required class="full-width" placeholder="Cost Per Mile"
+        name="cpmref" />
+    </ion-item>
+    <small padding-left color="danger" [hidden]="cpmref.valid || (!tripForm.submitted)">
+      Cost Per Mile is required
+    </small>
+
+  </div>
+
+  <ion-item no-lines>
+    <button [hidden]="!canSubmit" block ion-button color="secondary" type="submit" large outline>Submit</button>
+  </ion-item>
+</form>
