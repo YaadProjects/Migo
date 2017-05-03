@@ -9,12 +9,16 @@ import { TripStatusEnum } from '../../app-types/app-types';
 
 import { MyTripsPage } from '../my-trips/my-trips';
 
+import { Http, Headers } from '@angular/http';
+
 @Component({
   selector: 'page-passenger-trip-confirm',
   templateUrl: 'passenger-trip-confirm.html',
 })
 export class PassengerTripConfirmPage implements OnDestroy {
   private driverTrip:any;
+  private driver:any;
+  private driverSubscription:Subscription;
   private passengerTrip:any;
   private passengerTripObservable: FirebaseListObservable<any>;
   private allDriverTripObs: FirebaseListObservable<any>;
@@ -25,7 +29,8 @@ export class PassengerTripConfirmPage implements OnDestroy {
     private menu: MenuController,
     public params: NavParams,
     public auth: Auth,
-    public af: AngularFire
+    public af: AngularFire,
+    public http: Http
     ) {
       this.menu.swipeEnable(false);
 
@@ -42,8 +47,16 @@ export class PassengerTripConfirmPage implements OnDestroy {
         console.log('response', response);
         this.driverTrip = response.filter((tripElement) => {
           console.log('tripElement', tripElement);
-          return tripElement.startLocation.formatted_address === this.params.get('trip').startLocation.formatted_address;
+          return ((tripElement.startLocation.formatted_address === this.params.get('trip').startLocation.formatted_address)
+                  && (tripElement.authId === this.params.get('trip').authId));
         })[0];
+
+        this.driverSubscription = this.af.database.object("/users/" + this.driverTrip.authId ).subscribe((driver) => {
+          console.log('driver', driver);
+          this.driver = driver;
+        });
+
+        console.log(this.driver);
       });
 
       this.passengerTripObservable = this.af.database.list('trips/' + this.auth.uid + '/passenger', {
@@ -91,11 +104,31 @@ export class PassengerTripConfirmPage implements OnDestroy {
       this.passengerTripObservable.update(this.passengerTrip, {status: TripStatusEnum.PendingConfirmation});
       this.allDriverTripObs.update(this.driverTrip, {status: TripStatusEnum.PendingConfirmation});
 
-      this.navCtrl.push(MyTripsPage);
+      // send push notification to driver
+      let endPoint = 'https://fcm.googleapis.com/fcm/send';
+      let headers = new Headers();
+          headers.append('Authorization', 'key=AIzaSyB3pE57NS74L2c8e65SoAXxxqKZGygopjw');
+      let data = {
+        to: this.driver.pushToken,
+        notification: {
+          "title":"Message",
+          "body":"Passenger available for your trip",
+          "click_action":"FCM_PLUGIN_ACTIVITY",
+          "icon":"fcm_push_icon"
+        }
+      };
+
+      this.http.post(endPoint, data, {headers: headers}).subscribe((response) => {
+        console.log('response:', response);
+        this.navCtrl.push(MyTripsPage);
+      }, (error)=> {
+        console.log('error', error);
+      });
     }
 
     ngOnDestroy() {
       this.passengerTripSubscription.unsubscribe();
+      this.driverSubscription.unsubscribe();
       // this.allDriverTripObs.un
     }
 }

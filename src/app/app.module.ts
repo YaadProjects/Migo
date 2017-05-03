@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicErrorHandler } from 'ionic-angular';
+// import { IonicErrorHandler } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { FormsModule } from '@angular/forms';
@@ -31,26 +31,28 @@ import { Auth } from '../providers/auth';
 
 import {GroupBy} from '../pipes/group-by';
 
-// Push Notification through ionic.io
-import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+import {Push} from "@ionic-native/push";
 
-const cloudSettings: CloudSettings = {
-  'core': {
-    'app_id': '57eddd56'
-  },
-  'push': {
-    'sender_id': '166754869050',
-    'pluginConfig': {
-      'ios': {
-        'badge': true,
-        'sound': true
-      },
-      'android': {
-        'iconColor': '#343434'
-      }
-    }
-  }
-};
+// Push Notification through ionic.io
+// import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+
+// const cloudSettings: CloudSettings = {
+//   'core': {
+//     'app_id': '57eddd56'
+//   },
+//   'push': {
+//     'sender_id': '166754869050',
+//     'pluginConfig': {
+//       'ios': {
+//         'badge': true,
+//         'sound': true
+//       },
+//       'android': {
+//         'iconColor': '#343434'
+//       }
+//     }
+//   }
+// };
 
 // export const firebaseConfig = {
 //   apiKey: "AIzaSyAM62vxsf8Vr1pdZfJdmcK-ZGMjq9l3tHk",
@@ -103,7 +105,7 @@ const commonPages = [
       apiKey: 'AIzaSyCIfjMlujO_biUyNWlFETGg7XK7z8EBRjE', libraries: ['places', 'geometry'],
       region: 'USA'
     }),
-    CloudModule.forRoot(cloudSettings),
+    // CloudModule.forRoot(cloudSettings),
     AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
@@ -115,6 +117,8 @@ const commonPages = [
     StatusBar,
     SplashScreen,
     ErrorHandler,
+    Push,
+    // PushObject
     //{provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnDestroy } from '@angular/core';
-import { Platform , Nav, NavController} from 'ionic-angular';
+import { Platform , Nav, AlertController} from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { LoginPage } from '../pages/login/login';
@@ -14,10 +14,8 @@ import {Auth} from '../providers/auth';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import {
-  Push,
-  PushToken
-} from '@ionic/cloud-angular';
+import {Push, PushObject, PushOptions} from "@ionic-native/push";
+import { AngularFire } from 'angularfire2';
 
 @Component({
   template: `
@@ -54,9 +52,27 @@ export class MyApp  implements OnDestroy {
 
   MenuPages:Array<any> = [];
 
-  constructor(platform: Platform,
+  options: PushOptions = {
+    android: {
+      senderID: "166754869050"
+    },
+    ios: {
+      alert: "true",
+      badge: false,
+      sound: "true"
+    },
+    windows: {}
+  };
+
+  pushObject:PushObject;
+  deviceTokenforPushRegistration:string;
+
+  constructor(public platform: Platform,
               public auth: Auth,
-              public push: Push
+              public push: Push,
+              // public pushObject: PushObject,
+              private alertCtrl: AlertController,
+              private af: AngularFire
               // private navCtrl: NavController
               ) {
 
@@ -68,25 +84,20 @@ export class MyApp  implements OnDestroy {
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
       Splashscreen.hide();
+
+      this.pushObject = this.push.init(this.options);
+
+      this.pushObject.on('registration').subscribe((data: any) => {
+        this.deviceTokenforPushRegistration = data.registrationId;
+        console.log("device token ->", data.registrationId);
+      });
+
     });
 
     this.loginSubscription = this.auth.stateChangeEvent.subscribe((value:String) => {
       if (value.includes('login')) {
 
-        this.push.register().then((t: PushToken) => {
-          console.log('token', t);
-          return this.push.saveToken(t);
-        }).then((t: PushToken) => {
-          console.log('Token saved:', t.token);
-        }, (reason:any) => {
-          console.log('Token save failed:', reason);
-        });
-
-        this.push.rx.notification()
-        .subscribe((msg) => {
-          alert(msg.title + ': ' + msg.text);
-        });
-
+        this.initPushNotification();
 
         if(value.includes('driver')) {
           this.MenuPages = [
@@ -115,8 +126,53 @@ export class MyApp  implements OnDestroy {
   }
 
   logout(){
-    this.push.unregister();
+    // this.push.unregister();
     this.auth.logout();
+  }
+
+  initPushNotification() {
+    if (!this.platform.is('cordova')) {
+      console.warn("Push notifications not initialized. Cordova is not available - Run in physical device");
+      return;
+    } else {
+
+      console.log('initPushNotification');
+
+      if (this.deviceTokenforPushRegistration !== undefined) {
+        let profileObservable = this.af.database.object("/users/" + this.auth.uid );
+          profileObservable.update({pushToken: this.deviceTokenforPushRegistration});
+      }
+
+      this.pushObject.on('notification').subscribe((data: any) => {
+        console.log('data', data);
+        console.log('message', data.message);
+        //if user using app and push notification comes
+        if (data.additionalData.foreground) {
+          // if application open, show popup
+          let confirmAlert = this.alertCtrl.create({
+            title: 'New Notification',
+            message: data.message,
+            buttons: [{
+              text: 'Ignore',
+              role: 'cancel'
+            }, {
+              text: 'View',
+              handler: () => {
+                //TODO: Your logic here
+                // this.nav.push(DetailsPage, {message: data.message});
+              }
+            }]
+          });
+          confirmAlert.present();
+        } else {
+          //if user NOT using app and push notification comes
+          //TODO: Your logic on click of push notification directly
+          // this.nav.push(DetailsPage, {message: data.message});
+          console.log("Push notification clicked");
+        }
+      });
+      this.pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+    }
   }
 
   ngOnDestroy() {
