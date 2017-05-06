@@ -56,7 +56,9 @@ export class AllTripsPage implements OnDestroy {
 
   confirmTrip(trip){
     let selectedTrip = this.trips.filter((tripElem) => {
-      return tripElem.startLocation.formatted_address === trip.startLocation.formatted_address;
+      return ((tripElem.startLocation.formatted_address === trip.startLocation.formatted_address)
+              && (tripElem.authId === trip.authId)
+              );
     });
     console.log('selectedTrip', selectedTrip[0]);
     this.navCtrl.push(PassengerTripConfirmPage, {trip: selectedTrip[0]});

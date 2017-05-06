@@ -85,6 +85,8 @@ export class Auth implements OnDestroy {
   fetchUserData(authData) {
     let uid, displayName, email, providerData;
 
+    console.log('authData', authData);
+
     if (this.platform.is('cordova')) {
       uid = authData.uid,
       displayName = authData.displayName,
