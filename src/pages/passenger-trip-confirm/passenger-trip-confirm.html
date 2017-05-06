@@ -10,7 +10,7 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      You will be riding with <ion-badge color="secondary">Prasad C</ion-badge>
+      You will be riding with <ion-badge color="secondary">{{driver && driver.displayName}}</ion-badge>
       <p class="margin-top-10" text-center>On <ion-badge color="secondary">{{(driverTrip && driverTrip.startTime)}}</ion-badge></p>
     </ion-card-header>
     <ion-list>
