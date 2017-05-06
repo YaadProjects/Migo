@@ -11,6 +11,9 @@
   <allow-intent href="sms:*"/>
   <allow-intent href="mailto:*"/>
   <allow-intent href="geo:*"/>
+  <allow-intent href="*.firebaseio.com"/>
+  <allow-intent href="auth.firebase.com"/>
+  <allow-intent href="*.facebook.com"/>
   <platform name="android">
     <allow-intent href="market:*"/>
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>
@@ -81,6 +84,7 @@
   <allow-navigation href="http://10.225.30.242:8000"/>
   <allow-navigation href="http://localhost:8000"/>
   <allow-navigation href="http://192.168.2.4:8000"/>
+  <allow-navigation href="http://192.168.43.224:8100"/>
   <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
     <variable name="APP_ID" value="1834382376835949"/>
     <variable name="APP_NAME" value="spareSeat"/>
