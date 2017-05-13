@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { PassengerTripConfirmPage } from '../passenger-trip-confirm/passenger-trip-confirm';
 import { TripStatusEnum } from '../../app-types/app-types';
+import { toISOStringWithTZ } from '../../app-lib/utilities';
 
 @Component({
   selector: 'page-all-trips',
@@ -31,15 +32,17 @@ export class AllTripsPage implements OnDestroy {
         }
       });
       this.allDriverTripsSub = this.allDriverTripsObs.subscribe((response) => {
-        this.trips = response.map((trip) => {
-          console.log('trip all', trip);
-          let driverArray = [];
-          let keys = Object.keys(trip.driver);
-          keys.forEach(function(key){
-            if (trip.driver[key]['status'] === TripStatusEnum.Requested) {
-              driverArray.push(trip.driver[key]);
-            }
-          });
+        this.trips = response.
+                            map((trip) => {
+                              // console.log('trip all', trip);
+                              let driverArray = [];
+                              let keys = Object.keys(trip.driver);
+                              keys.forEach(function(key){
+                                if (trip.driver[key]['status'] === TripStatusEnum.Requested
+                                    && trip.driver[key]['startTime'] > toISOStringWithTZ(new Date())) {
+                                  driverArray.push(trip.driver[key]);
+                                }
+                              });
           return driverArray;
         });
         this.trips = this.flatten(this.trips);

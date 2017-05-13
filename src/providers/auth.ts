@@ -25,12 +25,12 @@ export class Auth implements OnDestroy {
     private af: AngularFire,
     private platform: Platform) {
       this.authSubscription = auth$.subscribe((state: FirebaseAuthState) => {
-        console.log("Reading thestatus...");
-        console.log(state);
-        console.log("status reading done---------#####");
+        // console.log("Reading thestatus...");
+        // console.log(state);
+        // console.log("status reading done---------#####");
         this.authState = state;
         if(!state) {
-          console.log('logged out', state);
+          // console.log('logged out', state);
           this.stateChangeEvent.next('logout');
         } else {
           this.fetchUserData(state);
@@ -88,10 +88,16 @@ export class Auth implements OnDestroy {
     console.log('authData', authData);
 
     if (this.platform.is('cordova')) {
-      uid = authData.uid,
-      displayName = authData.displayName,
-      email = authData.email,
-      providerData = authData.providerData[0];
+      uid = authData.uid;
+      if (authData.displayName) {
+        displayName = authData.displayName;
+        email = authData.email;
+        providerData = authData.providerData[0];
+      } else {
+        displayName = authData.auth.displayName;
+        email = authData.auth.email;
+        providerData = authData.auth.providerData[0];
+      }
     } else {
       uid = authData.uid,
       displayName = authData.auth.providerData[0].displayName,
@@ -121,6 +127,4 @@ export class Auth implements OnDestroy {
         this.stateChangeEvent.next('login' + ':' + userType);
       });
   }
-
-
 }

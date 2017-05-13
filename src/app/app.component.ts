@@ -70,7 +70,6 @@ export class MyApp  implements OnDestroy {
   constructor(public platform: Platform,
               public auth: Auth,
               public push: Push,
-              // public pushObject: PushObject,
               private alertCtrl: AlertController,
               private af: AngularFire
               // private navCtrl: NavController

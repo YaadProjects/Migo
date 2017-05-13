@@ -8,6 +8,8 @@ export enum TripTypeEnum {
 export enum TripStatusEnum {
   Requested,
   PendingConfirmation,
+  Confirmed,
+  Started,
   Completed,
   NoMatch,
   Cancelled

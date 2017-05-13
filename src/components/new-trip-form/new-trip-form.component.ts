@@ -1,8 +1,8 @@
 import { Component, Input, ElementRef, Output, EventEmitter } from '@angular/core';
 import { ToastController } from 'ionic-angular';
-import { TripTypeEnum, TripObjectInterface, USERTYPES, APP_NAME, TripStatusEnum } from '../../app-types/app-types';
+import { TripTypeEnum, USERTYPES, TripStatusEnum } from '../../app-types/app-types';
 import { GoogleMapsAPIWrapper, MapsAPILoader } from 'angular2-google-maps/core';
-import { tripRawToDbObject, toISOStringWithTZ } from '../../app-lib/utilities';
+import { toISOStringWithTZ } from '../../app-lib/utilities';
 import { ErrorHandler } from '../../providers/errorhandler';
 
 
@@ -19,7 +19,7 @@ import { ErrorHandler } from '../../providers/errorhandler';
 export class NewTripFormComponent {
   @Input()trip;
   @Input()userType;
-  @Output() submitValidTrip = new EventEmitter<any>(); 
+  @Output() submitValidTrip = new EventEmitter<any>();
 
   tripType: TripTypeEnum = TripTypeEnum.OneWay;
   allTripType = TripTypeEnum;
@@ -39,9 +39,7 @@ export class NewTripFormComponent {
     private toastCtrl: ToastController,
     private eh: ErrorHandler,
     private er: ElementRef
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(){
     if (this.trip) {
@@ -69,7 +67,7 @@ export class NewTripFormComponent {
   }
 
   initAddressAutoComplete(): void {
-    const pageDoc = this.er.nativeElement;  
+    const pageDoc = this.er.nativeElement;
     this.gLoader.load().then(() => {
       let startLocation = new google.maps.places.Autocomplete(pageDoc.querySelector("#startLocation"), {});
       let endLocation = new google.maps.places.Autocomplete(pageDoc.querySelector("#endLocation"), {});
@@ -88,37 +86,6 @@ export class NewTripFormComponent {
         this.trip.endLocation.name = endLocation.getPlace().name;
       });
     });
-  }
-
-  // distance() {
-  //   this.trip.startLocation
-  // }
-
-    _areDatesValid(): boolean {
-    this.dummyStartTime = (this.trip.startTime) ? +new Date(this.trip.startTime) : 0;
-    if (this.dummyStartTime) {
-      this.dummyEndTime = + new Date(this.trip.endTime);
-      return this.dummyEndTime > this.dummyStartTime;
-    }
-    return true;
-  }
-
-  tripDatesOk(): boolean {
-    if (!this._areDatesValid()) {
-      this.showDateCorrectionToast();
-      return false;
-    }
-    return true;
-  }
-
-  showDateCorrectionToast(): void {
-    let toast = this.toastCtrl.create({
-      message: 'Please correct Trip End Time.',
-      duration: 3000,
-      position: 'middle'
-    });
-
-    toast.present();
   }
 
   submitTripForm(ev: Event, tripFrom): void {
