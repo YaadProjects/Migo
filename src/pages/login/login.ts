@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ViewController, LoadingController } from 'ionic-angular';
+import { NavController, ViewController, LoadingController, Loading } from 'ionic-angular';
 
 
 import { APP_NAME } from '../../app-types/app-types';
@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
   appTitle: string = APP_NAME;
   userLoggedIn: boolean;
   loginSubscription: Subscription;
-  loader: any;
+  loader: Loading;
 
   constructor(
     public navCtrl: NavController,

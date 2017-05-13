@@ -49,12 +49,10 @@ export class DriverPage {
       let myDbOBject = tripRawToDbObject(this.trip);
       this.driverTrips.push(myDbOBject)
         .then(() => {
-          this.navCtrl.remove(0);
           this.navCtrl.push(MyTripsPage, {
             trip: this.trip
           });
         })
         .catch(this.eh.handle);
     }
-
 }
