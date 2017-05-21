@@ -1,7 +1,7 @@
 {
   "name": "spare-seat-cab-sharing",
   "author": "Lokesh kumar Jain",
-  "homepage": "http://ionicframework.com/",
+  "homepage": "github.com/lokeshjain2008/spareSeat",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",

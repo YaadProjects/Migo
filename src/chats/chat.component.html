@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar hideBackButton="false">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Chats|</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding-top>
+
+<ion-list>
+  <button ion-button block rounded (click)="moveToChatBox(user)"
+  *ngFor="let user of users | async"
+  [hidden]="user.uid==auth.uid"
+  >
+     {{user.displayName}}
+  </button>
+
+</ion-list>
+
+<ion-list *ngIf="otherUserId">
+  <chat-element [userId]="auth.uid" [otherUserId]="otherUserId"></chat-element>
+</ion-list>
+
+<!--<ul>
+  <li *ngFor="let chat of chatList | async">
+    {{chat}}
+    <button (click)="moveToChatBox(chat)"></button>
+  </li>
+
+</ul>-->
+</ion-content>

@@ -62,20 +62,20 @@ export class MyTripsPage implements OnInit, OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-  tripStatusWithColor(trip) {
-    let statusWithButtonColor;
-    if (trip.status === TripStatusEnum.Requested) {
-      statusWithButtonColor = { status: 'Requested', color: 'primary'};
-    } else if (trip.status === TripStatusEnum.PendingConfirmation) {
-      statusWithButtonColor = { status: 'Pending', color: 'dark'};
-    // } else if (trip.status === TripStatusEnum.Rejected) {
-    //   statusWithButtonColor = { status: 'Rejected', color: 'danger'};
-    } else if (trip.status === TripStatusEnum.Completed) {
-      statusWithButtonColor = { status: 'Completed', color: 'secondary'};
-    } else if (trip.status === TripStatusEnum.Cancelled) {
-      statusWithButtonColor = { status: 'Cancelled', color: 'dark'};
+  tripStatusWithColor(trip):{status: string, color: string}{
+    let status = trip.status;
+    let color:string;
+    switch(status){
+      case TripStatusEnum.Requested:
+        color = 'primary';
+      case TripStatusEnum.PendingConfirmation:
+        color = 'dark';
+      case TripStatusEnum.Completed:
+        color = 'seconday';
+      case TripStatusEnum.Cancelled:
+        color = 'dark';
     }
-    return statusWithButtonColor;
+    return {status:TripStatusEnum[status],color};
   }
 
 }

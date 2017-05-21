@@ -25,9 +25,6 @@ export class Auth implements OnDestroy {
     private af: AngularFire,
     private platform: Platform) {
       this.authSubscription = auth$.subscribe((state: FirebaseAuthState) => {
-        // console.log("Reading thestatus...");
-        // console.log(state);
-        // console.log("status reading done---------#####");
         this.authState = state;
         if(!state) {
           // console.log('logged out', state);

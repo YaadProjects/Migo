@@ -9,7 +9,7 @@ import { ProfilePage } from '../pages/profile/profile';
 
 import { PassengerPage } from '../pages/passenger/passenger';
 import { AllTripsPage } from '../pages/all-trips/all-trips';
-
+import {ChatComponent} from '../chats/chat.component';
 import {Auth} from '../providers/auth';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -48,6 +48,7 @@ export class MyApp  implements OnDestroy {
   dashboardPage = { title: 'My Trips', component: MyTripsPage };
   passengerPage = { title: 'New Trip', component: PassengerPage};
   allTripsPage = { title: 'All Driver Trip', component: AllTripsPage};
+  chatPage = {title: 'Chats', component:ChatComponent};
   loginSubscription:Subscription;
 
   MenuPages:Array<any> = [];
@@ -111,6 +112,8 @@ export class MyApp  implements OnDestroy {
             this.dashboardPage
           ];
         }
+
+        this.MenuPages.push(this.chatPage);
       }
     });
   }

@@ -9,6 +9,7 @@ import { ProfilePage } from '../profile/profile';
 import { MyTripsPage } from '../my-trips/my-trips';
 import { AllTripsPage } from '../all-trips/all-trips';
 
+import {ChatComponent} from "../../chats/chat.component";
 
 @Component({
   selector: 'page-login',
@@ -66,6 +67,11 @@ export class LoginPage implements OnInit {
     } else {
       this.navCtrl.setRoot(ProfilePage)
     }
+
+    //For testing Chat Feature.
+
+   // this.navCtrl.setRoot(ChatComponent);
+
   }
 
   // ngOnDestroy() {
