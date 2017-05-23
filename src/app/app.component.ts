@@ -78,6 +78,7 @@ export class MyApp  implements OnDestroy {
     this.auth = auth;
     this.rootPage = LoginPage;
 
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -94,10 +95,8 @@ export class MyApp  implements OnDestroy {
     });
 
     this.loginSubscription = this.auth.stateChangeEvent.subscribe((value:String) => {
-      if (value.includes('login')) {
-
+      if (value.includes('login') || (value.includes('profile-updated'))) {
         this.initPushNotification();
-
         if(value.includes('driver')) {
           this.MenuPages = [
             this.driverPage,
@@ -149,7 +148,7 @@ export class MyApp  implements OnDestroy {
         if (data.additionalData.foreground) {
           // if application open, show popup
           let confirmAlert = this.alertCtrl.create({
-            title: 'New Notification',
+            title: 'SpareSeat Notification',
             message: data.message,
             buttons: [{
               text: 'Ignore',

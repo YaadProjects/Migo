@@ -55,6 +55,7 @@ export class PassengerTripConfirmPage implements OnDestroy {
         this.driverTrip = response.filter((tripElement) => {
           // console.log('tripElement', tripElement);
           return ((tripElement.startLocation.formatted_address === this.params.get('trip').startLocation.formatted_address)
+                  && (tripElement.endLocation.formatted_address === this.params.get('trip').endLocation.formatted_address)
                   && (tripElement.authId === this.params.get('trip').authId));
         })[0];
 

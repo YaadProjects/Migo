@@ -59,7 +59,11 @@ export class ProfilePage implements OnDestroy {
 
       if (profileForm.valid) {
         this.profileObservable.update({userType: this.selectedUserType.name}).then(() => {
+
+          this.auth.stateChangeEvent.next('profile-updated:' + this.selectedUserType.name);
+
           this.loader.dismiss();
+
           if (this.selectedUserType === this.userTypes['driver']) {
             this.navCtrl.push(MyTripsPage);
           } else {
