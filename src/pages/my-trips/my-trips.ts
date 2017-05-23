@@ -12,14 +12,16 @@ import { Auth } from '../../providers/auth';
 import { Subscription } from 'rxjs/Subscription';
 
 import { TripStatusEnum } from '../../app-types/app-types';
+import 'rxjs/add/operator/switchMap';
+import {Observable} from "rxjs/observable";
 
 @Component({
   selector: 'page-my-trips',
   templateUrl: 'my-trips.html',
 })
-export class MyTripsPage implements OnInit, OnDestroy {
-  appTitle :string = APP_NAME;
-  userTrips: FirebaseListObservable<any>;
+export class MyTripsPage implements OnInit {
+  appTitle:string = APP_NAME;
+  userTrips:Observable<any[]>; //typescript mistake its type is FirebaseListObservable[]
   userType: String;
   userSubscription: Subscription;
 
@@ -51,15 +53,8 @@ export class MyTripsPage implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
-    let user = this.af.database.object("/users/" + this.auth.uid);
-    this.userSubscription = user.subscribe((user) => {
-      this.userType = user.userType;
-      this.userTrips = this.af.database.list("/trips/" + this.auth.uid + '/' + this.userType);
-    });
-  }
-
-  ngOnDestroy() {
-    this.userSubscription.unsubscribe();
+   this.userTrips =  this.af.database.object(`/users/${this.auth.uid}`)
+    .switchMap((user)=> this.af.database.list(`trips/${this.auth.uid}/${user.userType}`))
   }
 
   tripStatusWithColor(trip):{status: string, color: string}{
