@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, ViewController, LoadingController, Loading } from 'ionic-angular';
+import { Component, OnInit} from '@angular/core';
+import { NavController, ViewController, LoadingController, Loading, Events } from 'ionic-angular';
 
 
 import { APP_NAME } from '../../app-types/app-types';
+import { ALL_PAGES} from "../../app/app.component";
 import { Auth } from '../../providers/auth';
 import { Subscription } from 'rxjs/Subscription';
-import { ProfilePage } from '../profile/profile';
-import { MyTripsPage } from '../my-trips/my-trips';
-import { AllTripsPage } from '../all-trips/all-trips';
-
-import {ChatComponent} from "../../chats/chat.component";
 
 @Component({
   selector: 'page-login',
@@ -25,7 +21,8 @@ export class LoginPage implements OnInit {
     public navCtrl: NavController,
     public auth: Auth,
     public viewCtrl: ViewController,
-    private loaderCtrl: LoadingController
+    private loaderCtrl: LoadingController,
+    private events: Events
   ) {
     this.loader = this.loaderCtrl.create({
       content: 'Please wait',
@@ -60,16 +57,18 @@ export class LoginPage implements OnInit {
     // No Profile direct him to fill out the profile
     // If Driver take him to My trips Page
     // If Passenger take him to Show All Trips
+    let rootElement;
     if (value.includes('driver')) {
-      this.navCtrl.setRoot(MyTripsPage);
+      rootElement = ALL_PAGES.myTrips;
     } else if (value.includes('passenger')) {
-      this.navCtrl.setRoot(AllTripsPage)
+      rootElement = ALL_PAGES.allTrips;
     } else {
-      this.navCtrl.setRoot(ProfilePage)
+      rootElement = ALL_PAGES.profile;
     }
 
+      this.events.publish('page-changed', rootElement);
+      this.navCtrl.setRoot(rootElement.component);
     //For testing Chat Feature.
-
    // this.navCtrl.setRoot(ChatComponent);
 
   }
