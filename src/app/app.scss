@@ -41,3 +41,7 @@ h1 {
 h1, h2  {
   color: #333c4c !important;
 }
+
+.activeMenu{
+  background-color: map-get($colors, light);
+}

@@ -12,14 +12,16 @@ import { Auth } from '../../providers/auth';
 import { Subscription } from 'rxjs/Subscription';
 
 import { TripStatusEnum } from '../../app-types/app-types';
+import 'rxjs/add/operator/switchMap';
+import {Observable} from "rxjs/observable";
 
 @Component({
   selector: 'page-my-trips',
   templateUrl: 'my-trips.html',
 })
-export class MyTripsPage implements OnInit, OnDestroy {
-  appTitle :string = APP_NAME;
-  userTrips: FirebaseListObservable<any>;
+export class MyTripsPage implements OnInit {
+  appTitle:string = APP_NAME;
+  userTrips:Observable<any[]>; //typescript mistake its type is FirebaseListObservable[]
   userType: String;
   userSubscription: Subscription;
 
@@ -51,31 +53,24 @@ export class MyTripsPage implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
-    let user = this.af.database.object("/users/" + this.auth.uid);
-    this.userSubscription = user.subscribe((user) => {
-      this.userType = user.userType;
-      this.userTrips = this.af.database.list("/trips/" + this.auth.uid + '/' + this.userType);
-    });
+   this.userTrips =  this.af.database.object(`/users/${this.auth.uid}`)
+    .switchMap((user)=> this.af.database.list(`trips/${this.auth.uid}/${user.userType}`))
   }
 
-  ngOnDestroy() {
-    this.userSubscription.unsubscribe();
-  }
-
-  tripStatusWithColor(trip) {
-    let statusWithButtonColor;
-    if (trip.status === TripStatusEnum.Requested) {
-      statusWithButtonColor = { status: 'Requested', color: 'primary'};
-    } else if (trip.status === TripStatusEnum.PendingConfirmation) {
-      statusWithButtonColor = { status: 'Pending', color: 'dark'};
-    // } else if (trip.status === TripStatusEnum.Rejected) {
-    //   statusWithButtonColor = { status: 'Rejected', color: 'danger'};
-    } else if (trip.status === TripStatusEnum.Completed) {
-      statusWithButtonColor = { status: 'Completed', color: 'secondary'};
-    } else if (trip.status === TripStatusEnum.Cancelled) {
-      statusWithButtonColor = { status: 'Cancelled', color: 'dark'};
+  tripStatusWithColor(trip):{status: string, color: string}{
+    let status = trip.status;
+    let color:string;
+    switch(status){
+      case TripStatusEnum.Requested:
+        color = 'primary';
+      case TripStatusEnum.PendingConfirmation:
+        color = 'dark';
+      case TripStatusEnum.Completed:
+        color = 'seconday';
+      case TripStatusEnum.Cancelled:
+        color = 'dark';
     }
-    return statusWithButtonColor;
+    return {status:TripStatusEnum[status],color};
   }
 
 }

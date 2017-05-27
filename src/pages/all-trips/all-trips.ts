@@ -24,7 +24,7 @@ export class AllTripsPage implements OnDestroy {
     private menu: MenuController,
     ) {
       this.menu.swipeEnable(false);
-
+      //let work on this logic. can be written better. in the next call, will work on this.
       this.allDriverTripsObs = af.database.list('trips', {
         query: {
           orderByChild: 'driver',

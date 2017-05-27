@@ -8,6 +8,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { FormsModule } from '@angular/forms';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { AngularFireModule } from 'angularfire2';
+import {ChatModule} from "../chats/chat.module";
 
 //directive and components
 import { DirectionsMapDirective } from '../components/sebm-google-map-directions/sebm-google-map-directions';
@@ -102,6 +103,7 @@ const commonPages = [
     NewTripFormModule,
     IonicModule.forRoot(MyApp),
     FormsModule,
+    ChatModule,
     AgmCoreModule.forRoot({
       // apiKey: 'AIzaSyDfKLDQPQgpVU7wokCKnUgJVEB8vcwmd3g', libraries: ['places', 'geometry'],
       apiKey: 'AIzaSyCIfjMlujO_biUyNWlFETGg7XK7z8EBRjE', libraries: ['places', 'geometry'],

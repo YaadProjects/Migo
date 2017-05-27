@@ -1,0 +1,26 @@
+<div>
+  <div style="hight:200px; overflow:auto;">
+    <div *ngFor="let chat of chatRoom |async">
+      {{ chat.message }}
+    </div>
+  </div>
+
+  <div>
+    <ion-row>
+      <ion-col col-10 no-padding>
+        <ion-item>
+          <ion-input #msg="ngModel" type="text" required [(ngModel)]="message" placeholder="Type your message">
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-2 no-padding>
+        <button outline icon-only rounded [disabled]="msg.invalid"
+        (click)="addMessage()" ion-button>
+          <ion-icon name="send"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+</div>
