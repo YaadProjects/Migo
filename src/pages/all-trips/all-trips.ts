@@ -2,10 +2,13 @@ import { Component, OnDestroy} from '@angular/core';
 import { NavController, MenuController } from 'ionic-angular';
 
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { APP_NAME } from '../../app-types/app-types';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { PassengerTripConfirmPage } from '../passenger-trip-confirm/passenger-trip-confirm';
+// import { PassengerTripConfirmPage } from '../passenger-trip-confirm/passenger-trip-confirm';
+import { PassengerTab } from '../passenger-tab/passenger-tab';
+
 import { TripStatusEnum } from '../../app-types/app-types';
 import { toISOStringWithTZ } from '../../app-lib/utilities';
 
@@ -17,6 +20,7 @@ export class AllTripsPage implements OnDestroy {
   private allDriverTripsObs:FirebaseListObservable<any>;
   private allDriverTripsSub:Subscription;
   public trips:any;
+  appTitle:string = APP_NAME;
 
   constructor(
     private navCtrl: NavController,
@@ -54,7 +58,8 @@ export class AllTripsPage implements OnDestroy {
   }
 
   displayDay(date){
-    return new Date(date.replace(/-/g, '/')).toDateString();
+    var dateObjArray =  new Date(date).toDateString().split(' ', 3);
+    return dateObjArray.shift() + ' ' + dateObjArray.join(' ');
   }
 
   confirmTrip(trip){
@@ -63,8 +68,8 @@ export class AllTripsPage implements OnDestroy {
               && (tripElem.authId === trip.authId)
               );
     });
-    console.log('selectedTrip', selectedTrip[0]);
-    this.navCtrl.push(PassengerTripConfirmPage, {trip: selectedTrip[0]});
+    // this.navCtrl.push(PassengerTripConfirmPage, {trip: selectedTrip[0]});
+    this.navCtrl.push(PassengerTab, {trip: selectedTrip[0]});
   }
 
   ngOnDestroy(){

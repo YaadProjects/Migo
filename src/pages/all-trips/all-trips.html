@@ -3,12 +3,18 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{appTitle}} All Trips</ion-title>
+    <ion-title>{{appTitle}} | All Trips</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-item-group inset *ngFor="let group of trips | groupby:'startTime'">
+  <ion-list>
+    <ion-card text-wrap ion-item *ngFor="let trip of trips" (click)="confirmTrip(trip)">
+      <ion-badge class="trips" text-wrap item-left>{{displayDay(trip.startTime)}}</ion-badge>
+      {{ trip.startLocation.name }} <b>to</b> {{ trip.endLocation.name }}
+    </ion-card>
+  </ion-list>
+  <!--<ion-item-group inset *ngFor="let group of trips | groupby:'status'">
     <ion-item-divider class="divider">{{displayDay(group.name)}}</ion-item-divider>
     <ion-item text-wrap *ngFor="let trip of group.trips">
       {{ trip.startLocation.name }} To {{ trip.endLocation.name }}
@@ -17,5 +23,5 @@
         Select
       </button>
     </ion-item>
-  </ion-item-group>
+  </ion-item-group>-->
 </ion-content>

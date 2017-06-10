@@ -1,3 +1,17 @@
 .divider {
-  background-color: #bdc7d8;
+  color: royalblue;
+  .label {
+    font-size: 1.8rem;
+  }
+}
+
+.trips {
+  width: 80px;
+  height: 40px;
+  font-size: 1.6rem;
+  background-color: green;
+}
+
+[text-wrap] .label {
+    font-size: 1.6rem;
 }

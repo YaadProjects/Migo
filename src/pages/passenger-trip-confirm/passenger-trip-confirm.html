@@ -3,12 +3,59 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{appTitle}} Trip Confirmation</ion-title>
+    <ion-title>{{appTitle}} | Trip Confirmation</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-card>
+
+  <sebm-google-map [zoom]="12" [zoomControl]="false" *ngIf="driverTrip">
+    <sebm-google-map-destination [destination]="driverTrip.endLocation.formatted_address"></sebm-google-map-destination>
+  </sebm-google-map>
+
+  <ion-list>
+    <ion-item>
+      <ion-icon ios="ios-send-outline" md="md-send" item-left></ion-icon>
+      <h3 text-wrap>{{driverTrip && displayDay(driverTrip.startTime)}}</h3>
+      <h3 text-wrap>{{driverTrip && driverTrip.endLocation.formatted_address}}</h3>
+      <p item-end>About {{ distance().toFixed(2) }} Miles away</p>
+    </ion-item>
+
+    <ion-item>
+      <h2 ion-text color="secondary">
+        {{driverTrip && driverTrip.startLocation.name}}
+          to
+        {{driverTrip && driverTrip.endLocation.name}}
+      </h2>
+    </ion-item>
+
+    <ion-item>
+      <ion-textarea
+        placeholder="(Write a short note to the driver with details about your trip.)"
+        [(ngModel)]="msgToDriver">
+      </ion-textarea>
+    </ion-item>
+    <ion-item>
+      Price: ${{ (distance().toFixed(2) * (driverTrip && driverTrip.cpm)).toFixed(2) }} ( $ {{driverTrip && driverTrip.cpm}} Per Mile )
+    </ion-item>
+
+    <ion-item *ngIf="driver">
+      <ion-avatar item-left>
+        <img src="{{driver.providerData.photoURL}}">
+      </ion-avatar>
+      <h2>Driver</h2>
+      <p *ngIf="driver">{{driver.displayName}}</p>
+    </ion-item>
+
+    <ion-item no-lines>
+      <button text-center ion-button large color="primary" (click)="confirmTrip()" class="confirm-button">
+        confirmTrip
+      </button>
+    </ion-item>
+
+  </ion-list>
+
+  <!--<ion-card>
     <ion-card-header>
       You will be riding with <ion-badge color="secondary">{{driver && driver.displayName}}</ion-badge>
       <p class="margin-top-10" text-center>On <ion-badge color="secondary">{{(driverTrip && driverTrip.startTime)}}</ion-badge></p>
@@ -51,9 +98,9 @@
     </ion-card-content>
   </ion-card>
   <ion-item  no-lines>
-    <button ion-button color="primary" (click)="confirmTrip()" item-right>
+    <button ion-button full color="primary" (click)="confirmTrip()" class="confirm-button" item-right>
       confirmTrip
     </button>
-  </ion-item>
+  </ion-item>-->
 
 </ion-content>

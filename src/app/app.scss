@@ -16,7 +16,7 @@
 // automatically applied to the <body> element in the app.
 
 .toolbar-background {
-  background-color: #4f4f5a !important;
+  background-color: royalblue !important;
 }
 
 .page-background {
@@ -42,6 +42,10 @@ h1, h2  {
   color: #333c4c !important;
 }
 
-.activeMenu{
+.activeMenu {
   background-color: map-get($colors, light);
+}
+
+.item {
+  font-size: 1.6rem;
 }

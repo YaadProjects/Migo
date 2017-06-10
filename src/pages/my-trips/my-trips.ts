@@ -1,7 +1,7 @@
-import {Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit } from '@angular/core';
 import { NavController, MenuController } from 'ionic-angular';
 
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFire } from 'angularfire2';
 
 import { APP_NAME } from '../../app-types/app-types';
 import { DriverPage } from '../driver/driver';
@@ -11,7 +11,7 @@ import { Auth } from '../../providers/auth';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { TripStatusEnum } from '../../app-types/app-types';
+// import { TripStatusEnum } from '../../app-types/app-types';
 import 'rxjs/add/operator/switchMap';
 import {Observable} from "rxjs/observable";
 
@@ -35,9 +35,7 @@ export class MyTripsPage implements OnInit {
   }
 
   takeToDriverOrPassengerPage(tripObj) {
-    // this.navCtrl.remove(0);
     if (this.userType === 'driver') {
-      // this.navCtrl.remove(0);
       this.navCtrl.setRoot(DriverPage, {trip: tripObj});
     } else {
       this.navCtrl.setRoot(PassengerPage, {trip: tripObj});
@@ -45,7 +43,8 @@ export class MyTripsPage implements OnInit {
   }
 
   displayDay(date){
-    return new Date(date.replace(/-/g, '/')).toDateString();
+    var dateObjArray =  new Date(date).toDateString().split(' ', 3);
+    return dateObjArray.shift() + ' ' + dateObjArray.join(' ');
   }
 
   directToDriverPage() {
@@ -55,22 +54,6 @@ export class MyTripsPage implements OnInit {
   ngOnInit () {
    this.userTrips =  this.af.database.object(`/users/${this.auth.uid}`)
     .switchMap((user)=> this.af.database.list(`trips/${this.auth.uid}/${user.userType}`))
-  }
-
-  tripStatusWithColor(trip):{status: string, color: string}{
-    let status = trip.status;
-    let color:string;
-    switch(status){
-      case TripStatusEnum.Requested:
-        color = 'primary';
-      case TripStatusEnum.PendingConfirmation:
-        color = 'dark';
-      case TripStatusEnum.Completed:
-        color = 'seconday';
-      case TripStatusEnum.Cancelled:
-        color = 'dark';
-    }
-    return {status:TripStatusEnum[status],color};
   }
 
 }

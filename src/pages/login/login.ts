@@ -66,11 +66,9 @@ export class LoginPage implements OnInit {
       rootElement = ALL_PAGES.profile;
     }
 
-      this.events.publish('page-changed', rootElement);
-      this.navCtrl.setRoot(rootElement.component);
+    this.events.publish('page-changed', rootElement);
+    this.navCtrl.setRoot(rootElement.component);
     //For testing Chat Feature.
-   // this.navCtrl.setRoot(ChatComponent);
-
   }
 
   // ngOnDestroy() {

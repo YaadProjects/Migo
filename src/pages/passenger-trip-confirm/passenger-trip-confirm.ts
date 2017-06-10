@@ -4,6 +4,8 @@ import { NavController, MenuController, NavParams, LoadingController, Loading } 
 import { Auth } from '../../providers/auth';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
+import { APP_NAME } from '../../app-types/app-types';
+
 import { Subscription } from 'rxjs/Subscription';
 import { TripStatusEnum } from '../../app-types/app-types';
 
@@ -11,6 +13,8 @@ import { MyTripsPage } from '../my-trips/my-trips';
 import { PassengerPage } from '../passenger/passenger';
 
 import { Http, Headers } from '@angular/http';
+
+// import { toISOStringWithTZ } from '../../app-lib/utilities';
 
 @Component({
   selector: 'page-passenger-trip-confirm',
@@ -24,7 +28,10 @@ export class PassengerTripConfirmPage implements OnDestroy {
   private passengerTripObservable: FirebaseListObservable<any>;
   private allDriverTripObs: FirebaseListObservable<any>;
   private passengerTripSubscription: Subscription;
+  private driverTripSubscription: Subscription;
   private loader: Loading;
+  appTitle: string = APP_NAME;
+  msgToDriver:string = '';
 
   constructor(
     private navCtrl: NavController,
@@ -36,6 +43,7 @@ export class PassengerTripConfirmPage implements OnDestroy {
     private loadCtrl: LoadingController
     ) {
       this.menu.swipeEnable(false);
+
       this.loader = this.loadCtrl.create({
         content: 'Please wait',
         duration: 3000
@@ -50,7 +58,7 @@ export class PassengerTripConfirmPage implements OnDestroy {
         }
       });
 
-      this.allDriverTripObs.subscribe((response) => {
+      this.driverTripSubscription = this.allDriverTripObs.subscribe((response) => {
         // console.log('response', response);
         this.driverTrip = response.filter((tripElement) => {
           // console.log('tripElement', tripElement);
@@ -90,7 +98,8 @@ export class PassengerTripConfirmPage implements OnDestroy {
     }
 
   displayDay(date){
-    return new Date(date.replace(/-/g, '/')).toDateString();
+    // return toISOStringWithTZ(new Date(date));
+    return (new Date(date)).toString();
   }
 
   distance() {
@@ -114,10 +123,21 @@ export class PassengerTripConfirmPage implements OnDestroy {
   }
 
   confirmTrip() {
+    let endLocationName = this.driverTrip.endLocation.name;
+    // let driverTripId = this.driverTrip.$key;
     // console.log('driverTrip', this.driverTrip);
     // console.log('passengerTrip', this.passengerTrip);
     this.passengerTripObservable.update(this.passengerTrip, {status: TripStatusEnum.PendingConfirmation});
-    this.allDriverTripObs.update(this.driverTrip, {status: TripStatusEnum.PendingConfirmation});
+
+    this.allDriverTripObs.update(this.driverTrip,
+                                  {
+                                    status: TripStatusEnum.PendingConfirmation,
+                                    message: this.msgToDriver,
+                                    passengerTripId: this.passengerTrip.$key,
+                                    passengerId: this.auth.uid,
+                                    passengerDisplayName: this.auth.displayName
+                                  }
+                                );
 
     // send push notification to driver
     let endPoint = 'https://fcm.googleapis.com/fcm/send';
@@ -126,10 +146,11 @@ export class PassengerTripConfirmPage implements OnDestroy {
     let data = {
       to: this.driver.pushToken,
       notification: {
-        "title":"Message",
-        "body":"Passenger available for your trip",
+        "title":"Alert",
+        "body": this.auth.displayName + " is interested in riding with you to " + endLocationName,
         "click_action":"FCM_PLUGIN_ACTIVITY",
-        "icon":"fcm_push_icon"
+        "icon":"icon"
+        // "tripId": driverTripId
       }
     };
 
@@ -144,6 +165,6 @@ export class PassengerTripConfirmPage implements OnDestroy {
   ngOnDestroy() {
     this.passengerTripSubscription.unsubscribe();
     this.driverSubscription.unsubscribe();
-    // this.allDriverTripObs.un
+    this.driverTripSubscription.unsubscribe();
   }
 }

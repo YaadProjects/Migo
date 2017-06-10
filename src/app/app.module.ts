@@ -11,7 +11,8 @@ import { AngularFireModule } from 'angularfire2';
 import {ChatModule} from "../chats/chat.module";
 
 //directive and components
-import { DirectionsMapDirective } from '../components/sebm-google-map-directions/sebm-google-map-directions';
+// import { DirectionsMapDirective } from '../components/sebm-google-map-directions/sebm-google-map-directions';
+import { DestinationMapDirective } from '../components/sebm-google-map-destination/sebm-google-map-destination';
 import { NewTripFormModule } from "../components/new-trip-form/new-trip-form.module";
 //pages
 import { MyApp } from './app.component';
@@ -23,6 +24,9 @@ import { MyTripsPage } from '../pages/my-trips/my-trips';
 import { ProfilePage } from '../pages/profile/profile';
 import { AllTripsPage } from '../pages/all-trips/all-trips';
 import { PassengerTripConfirmPage } from '../pages/passenger-trip-confirm/passenger-trip-confirm';
+import { PassengerTab } from '../pages/passenger-tab/passenger-tab';
+
+import { DriverTripConfirmPage } from '../pages/driver-trip-confirm/driver-trip-confirm';
 
 //services
 import { ErrorHandler } from '../providers/errorhandler';
@@ -81,6 +85,8 @@ const commonPages = [
   ProfilePage,
   AllTripsPage,
   PassengerTripConfirmPage,
+  PassengerTab,
+  DriverTripConfirmPage,
 ];
 
 // const cloudSettings: CloudSettings = {
@@ -92,7 +98,8 @@ const commonPages = [
 @NgModule({
   declarations: [
     ...commonPages,
-    DirectionsMapDirective,
+    // DirectionsMapDirective,
+    DestinationMapDirective,
     //NewTripForm,
     GroupBy
   ],
@@ -101,7 +108,25 @@ const commonPages = [
     BrowserModule,
     HttpModule,
     NewTripFormModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp,
+                          {
+                            tabsPlacement: 'top',
+                            tabsHideOnSubPages: true,
+                            platforms: {
+                              android: {
+                                tabsPlacement: 'top',
+                                tabsHideOnSubPages: true,
+                              },
+                              ios: {
+                                tabsPlacement: 'top',
+                                tabsHideOnSubPages: true,
+                              },
+                              windows: {
+                                tabsPlacement: 'top',
+                                tabsHideOnSubPages: true,
+                              }
+                            }
+                          }),
     FormsModule,
     ChatModule,
     AgmCoreModule.forRoot({

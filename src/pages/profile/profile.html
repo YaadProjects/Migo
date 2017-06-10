@@ -3,8 +3,8 @@
     <button ion-button menuToggle [disabled]="!isExistingUser">
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title text-center class="title">
-      {{ appTitle }}
+    <ion-title class="title">
+      {{ appTitle }} | Profile
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -37,7 +37,7 @@
     </small>
 
     <ion-item no-lines padding>
-      <button block ion-button [disabled]="isExistingUser" color="primary" type="submit" large outline>Submit</button>
+      <button block ion-button [disabled]="isExistingUser" color="primary" type="submit" large>Submit</button>
     </ion-item>
   </form>
 

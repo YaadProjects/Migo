@@ -7,9 +7,11 @@ import { DriverPage } from '../pages/driver/driver';
 import { MyTripsPage } from '../pages/my-trips/my-trips';
 import { ProfilePage } from '../pages/profile/profile';
 
+import { DriverTripConfirmPage } from '../pages/driver-trip-confirm/driver-trip-confirm';
+
 import { PassengerPage } from '../pages/passenger/passenger';
 import { AllTripsPage } from '../pages/all-trips/all-trips';
-import { ChatComponent } from '../chats/chat.component';
+// import { ChatComponent } from '../chats/chat.component';
 import { Auth } from '../providers/auth';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -27,7 +29,7 @@ export const ALL_PAGES = {
   myTrips: { title: 'My Trips', component: MyTripsPage },
   passenger: { title: 'New Trip', component: PassengerPage },
   allTrips: { title: 'All Driver Trip', component: AllTripsPage },
-  chat: { title: 'Chats', component: ChatComponent },
+  // chat: { title: 'Chats', component: ChatComponent },
 
 }
 
@@ -46,7 +48,10 @@ export class MyApp implements OnDestroy {
 
   options: PushOptions = {
     android: {
-      senderID: "166754869050"
+      senderID: "166754869050",
+      sound: true,
+      icon: 'icon',
+      iconColor: 'blue'
     },
     ios: {
       alert: "true",
@@ -78,16 +83,22 @@ export class MyApp implements OnDestroy {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
-      Splashscreen.hide();
+      setTimeout(() =>
+      {
+        Splashscreen.hide();
+        StatusBar.styleDefault();
+      }, 100);
 
-      this.pushObject = this.push.init(this.options);
+      this.pushObject =  this.push.init(this.options);
 
-      this.pushObject.on('registration').subscribe((data: any) => {
-        this.deviceTokenforPushRegistration = data.registrationId;
-        console.log("device token ->", data.registrationId);
+      this.pushObject.hasPermission().then((res) => {
+        if (res) {
+          this.pushObject.on('registration').subscribe((data: any) => {
+            this.deviceTokenforPushRegistration = data.registrationId;
+            console.log("device token ->", data.registrationId);
+          });
+        }
       });
-
     });
 
     this.loginSubscription = this.auth.stateChangeEvent.subscribe((value: String) => {
@@ -108,7 +119,7 @@ export class MyApp implements OnDestroy {
           ];
         }
 
-        this.MenuPages.push(ALL_PAGES.chat);
+        // this.MenuPages.push(ALL_PAGES.chat);
       }
     });
   }
@@ -158,8 +169,8 @@ export class MyApp implements OnDestroy {
             }, {
               text: 'View',
               handler: () => {
-                //TODO: Your logic here
-                // this.nav.push(DetailsPage, {message: data.message});
+                // TODO: Your logic here
+                this.nav.push(DriverTripConfirmPage);
               }
             }]
           });
@@ -168,6 +179,7 @@ export class MyApp implements OnDestroy {
           //if user NOT using app and push notification comes
           //TODO: Your logic on click of push notification directly
           // this.nav.push(DetailsPage, {message: data.message});
+          this.nav.push(DriverTripConfirmPage);
           console.log("Push notification clicked");
         }
       });
