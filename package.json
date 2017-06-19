@@ -1,7 +1,7 @@
 {
-  "name": "spare-seat-cab-sharing",
+  "name": "migo-cab-sharing",
   "author": "Lokesh kumar Jain",
-  "homepage": "github.com/lokeshjain2008/spareSeat",
+  "homepage": "github.com/YaadProjects/Migo",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -54,5 +54,5 @@
       "locator": "ios"
     }
   ],
-  "description": "spareSeat: An Ionic project"
+  "description": "MiGO: An Ionic project"
 }
